@@ -13,12 +13,15 @@
 !/script/**/*.do
 !/script/**/*.tcl
 
+!/src/**/*.c
+!/src/**/*.h
+!/src/**/*.cpp
+
 !/intel/**/*.qpf
 !/intel/**/*.qsf
 !/intel/**/*.qip
 
 !/xilinx/**/*.xpr
-
 !/xilinx/**/*.bd
 !/xilinx/**/*.edif
 

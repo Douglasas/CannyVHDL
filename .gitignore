@@ -5,7 +5,6 @@
 !/hdl/**/*.vhd
 !/hdl/**/*.sv
 !/hdl/**/*.vhd
-!/hdl/**/*.qip
 !/sim/**/*.vhd
 !/sim/**/*.wcfg
 !/dat/**/*.dat
@@ -13,8 +12,11 @@
 !/script/**/*.py
 !/script/**/*.do
 !/script/**/*.tcl
+
 !/intel/**/*.qpf
 !/intel/**/*.qsf
+!/intel/**/*.qip
+
 !/xilinx/**/*.xpr
 
 !/xilinx/**/*.bd

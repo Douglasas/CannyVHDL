@@ -4,7 +4,7 @@
 !/img/*.png
 !/hdl/**/*.vhd
 !/hdl/**/*.sv
-!/hdl/**/*.vhd
+!/hdl/**/*.v
 !/sim/**/*.vhd
 !/sim/**/*.wcfg
 !/dat/**/*.dat

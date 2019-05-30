@@ -1,6 +1,7 @@
 */**
 !*.gitkeep
 !*/
+!/img/*.png
 !/hdl/**/*.vhd
 !/hdl/**/*.sv
 !/hdl/**/*.vhd

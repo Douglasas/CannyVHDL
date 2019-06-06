@@ -23,6 +23,7 @@ entity slidingwindow_dp is
     col_inc_i  : in std_logic;
     lin_zero_i : in std_logic;
     lin_inc_i  : in std_logic;
+    count_clr_i : in std_logic;
 
     -- sync
     rstn_i   : in std_logic;
@@ -93,9 +94,9 @@ begin
     window_o => window_o
   );
 
-  col_max_o <= '1' when col_r = IMAGE_X-1 else '0';
-  lin_max_o <= '1' when lin_r = IMAGE_Y else '0';
+  col_max_o <= '1' when col_r >= IMAGE_X-2 else '0';
+  lin_max_o <= '1' when lin_r >= IMAGE_Y-1 else '0';
 
-  valid_o <= '1' when col_r > PADX and lin_r > PADY else '0';
+  valid_o <= '1' when col_r >= PADX and lin_r >= PADY and count_clr_i = '0' else '0';
 
 end architecture;

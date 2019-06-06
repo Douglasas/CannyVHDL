@@ -33,6 +33,9 @@ architecture arch of slidingwindow_top is
   -- from datapath to control (dc)
   signal dc_col_max_w  : std_logic;
   signal dc_lin_max_w  : std_logic;
+  signal cd_count_clr_w : std_logic;
+
+  signal enable_w : std_logic;
 begin
 
   slidingwindow_ctrl_i : slidingwindow_ctrl
@@ -47,8 +50,11 @@ begin
     col_zero_o => cd_col_zero_w,
     col_inc_o  => cd_col_inc_w,
     lin_zero_o => cd_lin_zero_w,
-    lin_inc_o  => cd_lin_inc_w
+    lin_inc_o  => cd_lin_inc_w,
+    count_clr_o => cd_count_clr_w
   );
+
+  enable_w <= valid_i or cd_count_clr_w;
 
   slidingwindow_dp_i : slidingwindow_dp
   generic map (
@@ -63,14 +69,15 @@ begin
     col_inc_i  => cd_col_inc_w,
     lin_zero_i => cd_lin_zero_w,
     lin_inc_i  => cd_lin_inc_w,
+    count_clr_i => cd_count_clr_w,
 
-    enable_i   => valid_i,
+    enable_i   => enable_w,
     rstn_i     => rstn_i,
     clk_i      => clk_i,
 
     col_max_o  => dc_col_max_w,
     lin_max_o  => dc_lin_max_w,
-    
+
     valid_o    => valid_o,
     window_o   => window_o
   );

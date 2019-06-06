@@ -35,7 +35,8 @@ package slidingwindow_pkg is
       col_zero_o : out std_logic;
       col_inc_o  : out std_logic;
       lin_zero_o : out std_logic;
-      lin_inc_o  : out std_logic
+      lin_inc_o  : out std_logic;
+      count_clr_o : out std_logic
     );
   end component slidingwindow_ctrl;
 
@@ -53,6 +54,7 @@ package slidingwindow_pkg is
       col_inc_i  : in  std_logic;
       lin_zero_i : in  std_logic;
       lin_inc_i  : in  std_logic;
+      count_clr_i : in std_logic;
       rstn_i     : in  std_logic;
       clk_i      : in  std_logic;
       col_max_o  : out std_logic;

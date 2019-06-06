@@ -29,11 +29,11 @@ begin
 
     valid <= '1';
     pix <= x"00000000";
-    for i in 0 to 25 loop
+    for i in 0 to 24 loop
       pix <= pix + to_slogic(1);
       wait for period;
     end loop;
-
+    valid <= '0';
     wait;
   end process;
 

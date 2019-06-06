@@ -13,10 +13,11 @@ entity slidingwindow_ctrl is
     clk_i    : in std_logic;
 
     -- outputs
-    col_zero_o : out std_logic;
-    col_inc_o  : out std_logic;
-    lin_zero_o : out std_logic;
-    lin_inc_o  : out std_logic
+    col_zero_o  : out std_logic;
+    col_inc_o   : out std_logic;
+    lin_zero_o  : out std_logic;
+    lin_inc_o   : out std_logic;
+    count_clr_o : out std_logic
   );
 end entity;
 
@@ -28,12 +29,10 @@ begin
 
   p_MAIN : process(clk_i, rstn_i)
   begin
-    if enable_i = '1' then
-      if rstn_i = '0' then
-        current_st <= s_idle;
-      elsif rising_edge(clk_i) then
-        current_st <= next_st;
-      end if;
+    if rstn_i = '0' then
+      current_st <= s_idle;
+    elsif rising_edge(clk_i) then
+      current_st <= next_st;
     end if;
   end process;
 
@@ -55,7 +54,7 @@ begin
         end if;
 
       when s_clin =>
-        if lin_max_i = '1' then
+        if lin_max_i = '1' and col_max_i = '1' then
           next_st <= s_idle;
         else
           next_st <= s_ccol;
@@ -65,8 +64,9 @@ begin
   end process;
 
   col_zero_o <= '1' when current_st = s_idle or current_st = s_clin else '0';
-  col_inc_o  <= '1' when current_st = s_ccol or current_st = s_clin else '0';
+  col_inc_o  <= '1' when current_st = s_ccol else '0';
   lin_zero_o <= '1' when current_st = s_idle else '0';
   lin_inc_o  <= '1' when current_st = s_clin else '0';
+  count_clr_o <= '1' when current_st = s_idle else '0';
 
 end architecture;

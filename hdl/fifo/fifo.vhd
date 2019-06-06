@@ -1,36 +1,41 @@
 library IEEE;
-use IEEE.std_logic_1164.ALL;
-use IEEE.NUMERIC_STD.ALL;
-use IEEE.std_logic_UNSIGNED.ALL;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+use ieee.std_logic_unsigned.all;
+use ieee.math_real.all;
+
+library work;
+use work.fifo_pkg.all;
 
 entity fifo is
   generic (
-    DATA_SIZE      : integer := 32;
-    FIFO_SIZE      : integer := 32;
-    FIFO_ADDR_SIZE : integer := 5
+    FIFO_SIZE      : integer
   );
   port (
-    data_i      : in std_logic_vector (DATA_SIZE-1 downto 0);
+    data_i      : in slogic;
     write_i     : in std_logic;
     read_i      : in std_logic;
 
     clk_i       : in std_logic;
     rstn_i      : in std_logic;
 
-    data_o      : out std_logic_vector (DATA_SIZE-1 downto 0);
+    data_o      : out slogic;
     full_o      : out std_logic;
     empty_o     : out std_logic
   );
 end fifo;
 
 architecture arch_fifo of fifo is
-  signal fifo_r  : fifo_t(QUEUE_SIZE-1 downto 0)(DATA_SIZE-1 downto 0);
+  constant FIFO_ADDR_SIZE : integer := integer(ceil(log2(real(FIFO_SIZE))));
+
+  signal fifo_r  : slogic_vec(FIFO_SIZE-1 downto 0);
   signal full_w  : std_logic;
   signal empty_w : std_logic;
 
   signal start_addr_r : std_logic_vector(FIFO_ADDR_SIZE-1 downto 0);
   signal end_addr_r   : std_logic_vector(FIFO_ADDR_SIZE-1 downto 0);
 begin
+
   p_MAIN : process(clk_i, rstn_i)
   begin
     if rstn_i = '0' then

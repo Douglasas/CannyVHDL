@@ -2,7 +2,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-package slogic_package is
+package slogic_pkg is
 
   ---------------- Size Constants -------------
   constant MSB : integer := 10;
@@ -10,6 +10,8 @@ package slogic_package is
 
   --------------------- Type declaration --------------------
   subtype slogic is std_logic_vector(MSB+LSB-1 downto 0);
+  type slogic_vec is array(natural range <>) of slogic;
+  type slogic_window is array(natural range <>, natural range <>) of slogic;
 
   -------------------- Functions -----------------
   function "*" (A : slogic; B : slogic) return slogic;
@@ -21,9 +23,9 @@ package slogic_package is
   constant S_MINVALUE : slogic := '1' & (MSB+LSB-2 downto 0 => '0');
   signal test : signed(2*(MSB+LSB)-1 downto 0);
 
-end slogic_package;
+end slogic_pkg;
 
-package body slogic_package is
+package body slogic_pkg is
   ------------------------------------slogic operations---------------------------------
   ---- performs a fixed point multiplication
   function "*" (A : slogic; B : slogic) return slogic is
@@ -74,4 +76,4 @@ package body slogic_package is
     return slogic(shift_left(to_signed(I, MSB+LSB), LSB));
   end function;
 
-end slogic_package;
+end slogic_pkg;

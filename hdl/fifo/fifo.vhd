@@ -3,6 +3,10 @@ use IEEE.std_logic_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 use IEEE.std_logic_UNSIGNED.ALL;
 
+library work; 
+
+use work.fifo_pkg.all;
+
 entity fifo is
   generic (
     DATA_SIZE      : integer := 32;
@@ -24,7 +28,7 @@ entity fifo is
 end fifo;
 
 architecture arch_fifo of fifo is
-  signal fifo_r  : fifo_t(QUEUE_SIZE-1 downto 0)(DATA_SIZE-1 downto 0);
+  signal fifo_r  : fifo_t(FIFO_SIZE-1 downto 0);
   signal full_w  : std_logic;
   signal empty_w : std_logic;
 
@@ -59,3 +63,4 @@ begin
   full_o  <= full_w;
 
 end arch_fifo;
+

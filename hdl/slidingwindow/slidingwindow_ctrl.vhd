@@ -47,14 +47,16 @@ begin
         end if;
 
       when s_ccol =>
-        if col_max_i = '1' then
+        if col_max_i = '1' and enable_i ='1' then
           next_st <= s_clin;
         else
           next_st <= s_ccol;
         end if;
 
       when s_clin =>
-        if lin_max_i = '1' and col_max_i = '1' then
+        if enable_i = '0' then
+          next_st <= s_clin;
+        elsif lin_max_i = '1' and col_max_i = '1' then
           next_st <= s_idle;
         else
           next_st <= s_ccol;

@@ -17,12 +17,17 @@ package slogic_pkg is
   function to_slogic(I : integer) return slogic;
   function "*" (A : slogic; B : slogic) return slogic;
   function "+" (A : slogic; B : slogic) return slogic;
+  function "<" (A : slogic; B : slogic) return boolean;
+  function "<=" (A : slogic; B : slogic) return boolean;
+  function ">" (A : slogic; B : slogic) return boolean;
+  function ">=" (A : slogic; B : slogic) return boolean;
+  function or_reduce(A : slogic_vec) return slogic;
   function sum_reduce(A : slogic_vec; SIZE : integer) return slogic;
+  function partial_sum_reduce(A : slogic_vec; SIZE : integer; STOP_POINT : integer) return slogic_vec;
 
   ----------------- Constants -------------
   constant S_MAXVALUE : slogic := '0' & (MSB+LSB-2 downto 0 => '1');
   constant S_MINVALUE : slogic := '1' & (MSB+LSB-2 downto 0 => '0');
-  signal test : signed(2*(MSB+LSB)-1 downto 0);
 
 end slogic_pkg;
 
@@ -37,8 +42,8 @@ package body slogic_pkg is
 
   ---- performs a fixed point multiplication
   function "*" (A : slogic; B : slogic) return slogic is
-    variable v_MULT    : signed(2*(MSB+LSB)-1 downto 0) := (others => '0');
-    variable v_RESULT  : signed(MSB+LSB-1 downto 0);
+    variable v_MULT    : signed(2*(MSB+LSB)-1 downto 0);
+    variable v_RESULT  : signed(2*(MSB+LSB)-1 downto 0);
   begin
     v_MULT := signed(A) * signed(B);
 
@@ -57,15 +62,15 @@ package body slogic_pkg is
     --   v_RESULT := resize(shift_right(v_MULT, LSB) + 1, MSB+LSB);
     --   return slogic(v_RESULT);
     -- end if;
-    v_RESULT := resize(shift_right(v_MULT, LSB), MSB+LSB);
-    return slogic(v_RESULT);
+    v_RESULT := shift_right(v_MULT, LSB);
+    return slogic(resize(v_RESULT, MSB+LSB));
   end function;
 
 
   function "+" (A : slogic; B : slogic) return slogic is
-    variable v_SUM : std_logic_vector(MSB+LSB downto 0);
+    variable v_SUM : signed(MSB+LSB downto 0);
   begin
-    v_SUM := std_logic_vector( resize(unsigned(A), MSB+LSB+1) + resize(unsigned(B), MSB+LSB+1) );
+    v_SUM := resize(signed(A), MSB+LSB+1) + resize(signed(B), MSB+LSB+1);
 
     -- check overflow
     -- if signed(v_SUM) > resize(signed(S_MAXVALUE), 2*(MSB+LSB)) then
@@ -78,11 +83,40 @@ package body slogic_pkg is
     return slogic(resize(signed(v_SUM), MSB+LSB));
   end function;
 
+  function "<" (A : slogic; B : slogic) return boolean is
+  begin
+    return (signed(A) < signed(B));
+  end function;
+
+  function "<=" (A : slogic; B : slogic) return boolean is
+  begin
+    return (signed(A) <= signed(B));
+  end function;
+
+  function ">" (A : slogic; B : slogic) return boolean is
+  begin
+    return (signed(A) > signed(B));
+  end function;
+
+  function ">=" (A : slogic; B : slogic) return boolean is
+  begin
+    return (signed(A) >= signed(B));
+  end function;
+
+  -- make the implementation of or_reduce for slogic
+  function or_reduce(A : slogic_vec) return slogic is
+    variable acc : slogic := (others => '0');
+  begin
+    for i in A'range loop
+      acc := acc or A(i);
+    end loop;
+    return acc;
+  end function;
+
   -- make a parallel implementation of add_reduce for slogic --- SIZE must be multiple of 2
   function sum_reduce(A : slogic_vec; SIZE : integer) return slogic is
     variable acc : slogic := (others => '0');
-	 --type t_LAYERS is array() of slogic_vector();
-	 variable result : slogic_vec(SIZE/2-1 downto 0);
+    variable result : slogic_vec(SIZE/2-1 downto 0);
   begin
     if SIZE = 1 then
       return A(0);
@@ -91,6 +125,20 @@ package body slogic_pkg is
         result(i) := A(2*i) + A(2*i+1);
       end loop;
       return sum_reduce(result, SIZE/2);
+    end if;
+  end function;
+
+  -- make a partial parallel implementation of add_reduce for slogic
+  function partial_sum_reduce(A : slogic_vec; SIZE : integer; STOP_POINT : integer) return slogic_vec is
+    variable result : slogic_vec(SIZE/2-1 downto 0);
+  begin
+    if SIZE = STOP_POINT then
+      return A;
+    else
+      for i in 0 to SIZE/2-1 loop
+        result(i) := A(2*i) + A(2*i+1);
+      end loop;
+      return partial_sum_reduce(result, SIZE/2, STOP_POINT);
     end if;
   end function;
 

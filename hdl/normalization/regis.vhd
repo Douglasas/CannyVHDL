@@ -6,23 +6,23 @@ use work.slogic_pkg.all;
 
 entity regis is
 	port(
-		clk_i : in std_logic;
-		rstn_i : in std_logic;
-		enable_i : in std_logic;
-		data_i : in slogic;
-		data_o : out slogic
+    enable_i : in std_logic;
+    data_i   : in slogic;
+
+    clk_i    : in std_logic;
+		rstn_i   : in std_logic;
+
+    data_o   : out slogic
 	);
 end entity;
 
 architecture arch of regis is
-
 	signal reg_r : slogic;
-
 begin
-	
+
 	main: process (clk_i, rstn_i)
 	begin
-		
+
 		if(enable_i = '1') then
 			if(rstn_i = '0') then
 				reg_r <= (others => '0');
@@ -30,9 +30,9 @@ begin
 				reg_r <= data_i;
 			end if;
 		end if;
-		
+
 	end process;
-	
+
 	data_o <= reg_r;
-	
+
 end arch;

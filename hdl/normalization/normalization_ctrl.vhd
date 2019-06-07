@@ -1,25 +1,26 @@
-library IEEE;
-use IEEE.std_logic_1164.all;
+library ieee;
+use ieee.std_logic_1164.all;
 
-entity fsm is
+entity normalization_ctrl is
 	port(
+    full_i : in std_logic;
+    empty_i : in std_logic;
+
 		clk_i : in std_logic;
 		rstn_i : in std_logic;
-		full_i : in std_logic;
-		empty_i : in std_logic;
-		
+
 		read_o : out std_logic;
 		valid_o : out std_logic
 	);
-end fsm;
+end normalization_ctrl;
 
-architecture arch of fsm is
+architecture arch of normalization_ctrl is
 
 	type t_state is (s_IDLE, s_division, s_last_pix, s_normalize);
 	signal atual, proximo : t_state;
-	
+
 	begin
-		
+
 		u_atual: process(atual, rstn_i, clk_i)
 		begin
 			if (rstn_i = '0') then
@@ -28,7 +29,7 @@ architecture arch of fsm is
 				atual <= proximo;
 			end if;
 		end process;
-		
+
 		u_proximo: process(atual, full_i, empty_i)
 		BEGIN
 			case atual is
@@ -50,8 +51,8 @@ architecture arch of fsm is
 					proximo <= s_IDLE;
 			end case;
 		end process;
-		
-		read_o <= '1' when (atual = s_division or atual = s_normalize) else '0';
+
+		read_o  <= '1' when (atual = s_division or atual = s_normalize) else '0';
 		valid_o <= '1' when (atual = s_normalize or atual = s_last_pix) else '0';
 
 end arch;

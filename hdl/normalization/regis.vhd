@@ -22,11 +22,10 @@ begin
 
 	main: process (clk_i, rstn_i)
 	begin
-
-		if(enable_i = '1') then
-			if(rstn_i = '0') then
-				reg_r <= (others => '0');
-			elsif (rising_edge(clk_i)) then
+    if(rstn_i = '0') then
+      reg_r <= (others => '0');
+    elsif(enable_i = '1') then
+			if (rising_edge(clk_i)) then
 				reg_r <= data_i;
 			end if;
 		end if;

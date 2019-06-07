@@ -8,7 +8,6 @@ package fifo_pkg is
 
   component fifo
     generic (
-      DATA_SIZE : integer;
       FIFO_SIZE : integer
     );
     port (

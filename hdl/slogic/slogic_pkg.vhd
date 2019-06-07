@@ -16,6 +16,7 @@ package slogic_pkg is
   -------------------- Functions -----------------
   function to_slogic(I : integer) return slogic;
   function "*" (A : slogic; B : slogic) return slogic;
+  function "/" (A : slogic; B : slogic) return slogic;
   function "+" (A : slogic; B : slogic) return slogic;
   function "<" (A : slogic; B : slogic) return boolean;
   function "<=" (A : slogic; B : slogic) return boolean;
@@ -65,8 +66,7 @@ package body slogic_pkg is
     v_RESULT := shift_right(v_MULT, LSB);
     return slogic(resize(v_RESULT, MSB+LSB));
   end function;
-
-
+  
   function "+" (A : slogic; B : slogic) return slogic is
     variable v_SUM : signed(MSB+LSB downto 0);
   begin
@@ -80,7 +80,23 @@ package body slogic_pkg is
     -- if signed(v_SUM) < resize(signed(S_MINVALUE), 2*(MSB+LSB)) then
     --   return S_MINVALUE;
     -- end if;
-    return slogic(resize(signed(v_SUM), MSB+LSB));
+    return slogic(resize(v_SUM, MSB+LSB));
+  end function;
+  
+  function "/" (A : slogic; B : slogic) return slogic is
+    variable v_RES : signed(MSB+LSB-1 downto 0);
+  begin
+    v_RES := signed(A) / signed(B);
+
+    -- check overflow
+    -- if signed(v_SUM) > resize(signed(S_MAXVALUE), 2*(MSB+LSB)) then
+    --   return S_MAXVALUE;
+    -- end if;
+    -- -- check underflow
+    -- if signed(v_SUM) < resize(signed(S_MINVALUE), 2*(MSB+LSB)) then
+    --   return S_MINVALUE;
+    -- end if;
+    return slogic(shift_left(v_RES, LSB));
   end function;
 
   function "<" (A : slogic; B : slogic) return boolean is

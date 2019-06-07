@@ -20,11 +20,13 @@ entity gaussian_top is
 	);
 end gaussian_top;
 
-architecture arc of gaussian_top is 
+architecture arc of gaussian_top is
 	signal window_data_w : slogic_window(WINDOW_Y-1 downto 0, WINDOW_X-1 downto 0);
-	signal semi_result_w : slogic_window(WINDOW_Y-1 downto 0, WINDOW_X-1 downto 0);
+	signal window_mult_w : slogic_window(WINDOW_Y-1 downto 0, WINDOW_X-1 downto 0);
+	signal semi_result_w : slogic_vec(WINDOW_Y * WINDOW_X downto 0);
+  signal pix_res_w : slogic;
 begin
-	
+
 	slidingwindow_top_i : slidingwindow_top
 	  generic map (
 		IMAGE_X  => IMAGE_X,
@@ -40,14 +42,14 @@ begin
 		valid_o  => valid_o,
 		window_o => window_data_w
 	  );
-	
+
 	g_GENERATE_FOR_i: for i in 0 to WINDOW_Y-1 generate
 		g_GENERATE_FOR_j: for j in 0 to WINDOW_X-1 generate
-			semi_result_w(i,j) <= window_data_w(i,j) * GAUS(i,j);
+			window_mult_w(i,j) <= window_data_w(i,j) * GAUS(i,j);
+      semi_result_w( i*WINDOW_X + j ) <= window_mult_w(i,j);
 		end generate g_GENERATE_FOR_j;
 	end generate g_GENERATE_FOR_i;
 
-	pix_o <= sum_reduct(semi_result_w);	
-	
-	
+	pix_o <= sum_reduce(semi_result_w, WINDOW_Y * WINDOW_X + 1);
+
 end arc;

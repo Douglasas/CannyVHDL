@@ -2,9 +2,15 @@
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
+from bitstring import Bits
 
-bits_total = 32
-bits_fract = 22
+MSB = 10
+LSB = 22
+
+def to_fixed(val: float) -> str:
+    intval = round(val * (2 ** LSB))
+    b = Bits(int=intval, length=MSB + LSB)
+    return b.bin
 
 def img_to_dat(img_name: str, file_name: str = "../dat/img.dat"):
 
@@ -13,8 +19,7 @@ def img_to_dat(img_name: str, file_name: str = "../dat/img.dat"):
 
     for line in img:
         for pix in line:
-            bin_value = bin(pix << bits_fract)[2:]
-            file.write((bits_total-len(bin_value))*'0' + bin_value)
+            file.write(to_fixed(pix))
             file.write('\n')
 
 img_to_dat("../img/lena.png")

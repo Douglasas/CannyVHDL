@@ -1,6 +1,0 @@
-<?xml version="1.0" ?>
-<LOG_ROOT>
-	<PROJECT NAME="normalizacao">
-		<CBX_INST_ENTRY INSTANCE_NAME="|top|datapath:u1_dp|lpm_divide:Div0" CBX_FILE_NAME="lpm_divide_rqo.tdf"/>
-	</PROJECT>
-</LOG_ROOT>

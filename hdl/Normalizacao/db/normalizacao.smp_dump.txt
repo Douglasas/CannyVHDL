@@ -1,7 +1,0 @@
-
-State Machine - |top|fsm:u0_fsm|atual
-Name atual.s_normalize atual.s_last_pix atual.s_division atual.s_IDLE 
-atual.s_IDLE 0 0 0 0 
-atual.s_division 0 0 1 1 
-atual.s_last_pix 0 1 0 1 
-atual.s_normalize 1 0 0 1 

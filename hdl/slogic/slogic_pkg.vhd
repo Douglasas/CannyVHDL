@@ -2,7 +2,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-package slogic_package is
+package slogic_pkg is
 
   ---------------- Size Constants -------------
   constant MSB : integer := 10;
@@ -10,10 +10,14 @@ package slogic_package is
 
   --------------------- Type declaration --------------------
   subtype slogic is std_logic_vector(MSB+LSB-1 downto 0);
+  type slogic_vec is array(natural range <>) of slogic;
+  type slogic_window is array(natural range <>, natural range <>) of slogic;
 
   -------------------- Functions -----------------
   function "*" (A : slogic; B : slogic) return slogic;
   function "+" (A : slogic; B : slogic) return slogic;
+  function "/" (A : slogic; B : slogic) return slogic;
+  function ">" (A : slogic; B : slogic) return boolean;
   function to_slogic(I : integer) return slogic;
 
   ----------------- Constants -------------
@@ -21,9 +25,9 @@ package slogic_package is
   constant S_MINVALUE : slogic := '1' & (MSB+LSB-2 downto 0 => '0');
   signal test : signed(2*(MSB+LSB)-1 downto 0);
 
-end slogic_package;
+end slogic_pkg;
 
-package body slogic_package is
+package body slogic_pkg is
   ------------------------------------slogic operations---------------------------------
   ---- performs a fixed point multiplication
   function "*" (A : slogic; B : slogic) return slogic is
@@ -53,9 +57,9 @@ package body slogic_package is
 
 
   function "+" (A : slogic; B : slogic) return slogic is
-    variable v_SUM : std_logic_vector(MSB+LSB downto 0);
+    variable v_SUM : signed(MSB+LSB downto 0);
   begin
-    v_SUM := std_logic_vector( resize(unsigned(A), MSB+LSB+1) + resize(unsigned(B), MSB+LSB+1) );
+    v_SUM := resize(signed(A), MSB+LSB+1) + resize(signed(B), MSB+LSB+1);
 
     -- check overflow
     -- if signed(v_SUM) > resize(signed(S_MAXVALUE), 2*(MSB+LSB)) then
@@ -65,7 +69,28 @@ package body slogic_package is
     -- if signed(v_SUM) < resize(signed(S_MINVALUE), 2*(MSB+LSB)) then
     --   return S_MINVALUE;
     -- end if;
-    return slogic(resize(signed(v_SUM), MSB+LSB));
+    return slogic(resize(v_SUM, MSB+LSB));
+  end function;
+  
+  function "/" (A : slogic; B : slogic) return slogic is
+    variable v_RES : signed(MSB+LSB-1 downto 0);
+  begin
+    v_RES := signed(A) / signed(B);
+
+    -- check overflow
+    -- if signed(v_SUM) > resize(signed(S_MAXVALUE), 2*(MSB+LSB)) then
+    --   return S_MAXVALUE;
+    -- end if;
+    -- -- check underflow
+    -- if signed(v_SUM) < resize(signed(S_MINVALUE), 2*(MSB+LSB)) then
+    --   return S_MINVALUE;
+    -- end if;
+    return slogic(shift_left(v_RES, LSB));
+  end function;
+  
+  function ">" (A : slogic; B : slogic) return boolean is
+  begin
+    return signed(A) > signed(B);
   end function;
 
   ---- converts integer without decimal part to slogic
@@ -74,4 +99,4 @@ package body slogic_package is
     return slogic(shift_left(to_signed(I, MSB+LSB), LSB));
   end function;
 
-end slogic_package;
+end slogic_pkg;

@@ -5,7 +5,6 @@ use ieee.std_logic_unsigned.all;
 use ieee.math_real.all;
 
 library work;
-use work.slogic_pkg.all;
 use work.fifo_pkg.all;
 
 entity fifo is

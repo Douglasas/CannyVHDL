@@ -5,41 +5,48 @@ library work;
 use work.slogic_pkg.all;
 use work.normalization_pkg.all;
 
-entity top is
+entity normalization_top is
 port(
-	clk_i : in std_logic;
-	rstn_i : in std_logic;
-	valid_i : in std_logic;
-	pix_i : in slogic;
+  valid_i : in std_logic;
+  pix_i   : in slogic;
+
+	clk_i   : in std_logic;
+	rstn_i  : in std_logic;
+
 	valid_o : out std_logic;
-	pix_o : out slogic
-);	
+	pix_o   : out slogic
+);
 end entity;
 
-architecture arch of top is
+architecture arch of normalization_top is
+  -- from control to datapath (cd)
+  signal cd_read_w  : std_logic;
+  -- from datapath to control (dc)
+	signal dc_full_w  : std_logic;
+  signal dc_empty_w : std_logic;
+begin
 
-	signal w_full, w_empty, w_read : std_logic;
+  normalization_ctrl_i : normalization_ctrl
+  port map (
+    full_i  => dc_full_w,
+    empty_i => dc_empty_w,
+    clk_i   => clk_i,
+    rstn_i  => rstn_i,
+    read_o  => cd_read_w,
+    valid_o => valid_o
+  );
 
-	begin
+  normalization_dp_i : normalization_dp
+  port map (
+    read_i  => cd_read_w,
+    valid_i => valid_i,
+    pix_i   => pix_i,
+    clk_i   => clk_i,
+    rstn_i  => rstn_i,
+    full_o  => dc_full_w,
+    empty_o => dc_empty_w,
+    pix_o   => pix_o
+  );
 
-	u0_fsm : fsm port map(
-		clk_i => clk_i,
-		rstn_i => rstn_i,
-		full_i => w_full,
-		empty_i => w_empty,
-		read_o => w_read,
-		valid_o => valid_o
-	);
-	
-	u1_dp : datapath port map(
-		clk_i => clk_i,
-		rstn_i => rstn_i,
-		read_i => w_read,
-		valid_i => valid_i,
-		pix_i => pix_i,
-		full_o => w_full,
-		empty_o => w_empty,
-		pix_o => pix_o
-	);
 
 end arch;

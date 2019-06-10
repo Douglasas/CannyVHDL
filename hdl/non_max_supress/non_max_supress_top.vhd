@@ -70,17 +70,17 @@ architecture arch of non_max_supress_top is
 	-- Multiplex Pi
 	
 	multiplex_pi_out_w <= pix_theta_i when pix_theta_i(31) = '0' else
-								 pix_center_theta_w + x"00C90FDB";
+								 pix_center_theta_w + to_slogic(3.14159);
 	
 	--
 	
 	
 	-- Decoder
 	
-	exit_decoder_w <= "00" when ((pix_center_theta_w >= x"00000000" and pix_center_theta_w < x"05A00000") or
-										(pix_center_theta_w >= x"27600000" and pix_center_theta_w < x"2D000000")) else
-							"01" when (pix_center_theta_w >= x"05A00000" and pix_center_theta_w < x"10E00000") else
-							"10" when (pix_center_theta_w >= x"10E00000" and pix_center_theta_w < x"1C200000") else 
+	exit_decoder_w <= "00" when ((pix_center_theta_w >= to_slogic(0) and pix_center_theta_w < to_slogic(0.3926991)) or
+										(pix_center_theta_w >= to_slogic(2.7488936) and pix_center_theta_w < to_slogic(3.14159))) else
+							"01" when (pix_center_theta_w >= to_slogic(0.3926991) and pix_center_theta_w < to_slogic(1.178097)) else
+							"10" when (pix_center_theta_w >= to_slogic(1.178097) and pix_center_theta_w < to_slogic(1.9634954)) else 
 							"11";
 	
 	-----------

@@ -1,6 +1,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+use ieee.math_real.all;
 
 package slogic_pkg is
 
@@ -15,8 +16,14 @@ package slogic_pkg is
 
   -------------------- Functions -----------------
   function to_slogic(I : integer) return slogic;
+  function to_slogic(R : real) return slogic; -- not for execution
   function "*" (A : slogic; B : slogic) return slogic;
+  function "/" (A : slogic; B : slogic) return slogic;
   function "+" (A : slogic; B : slogic) return slogic;
+  function "-" (A : slogic; B : slogic) return slogic;
+  function "-" (A : slogic) return slogic;
+  function shift_left (A : slogic; QT : integer) return slogic;
+  function shift_right (A : slogic; QT : integer) return slogic;
   function "<" (A : slogic; B : slogic) return boolean;
   function "<=" (A : slogic; B : slogic) return boolean;
   function ">" (A : slogic; B : slogic) return boolean;
@@ -38,6 +45,12 @@ package body slogic_pkg is
   function to_slogic (I : integer) return slogic is
   begin
     return slogic(shift_left(to_signed(I, MSB+LSB), LSB));
+  end function;
+
+  ---- converts real number to slogic
+  function to_slogic(R : real) return slogic is
+  begin
+    return slogic(to_signed(integer(round(R * (real(2)**LSB))), MSB+LSB));
   end function;
 
   ---- performs a fixed point multiplication
@@ -66,7 +79,6 @@ package body slogic_pkg is
     return slogic(resize(v_RESULT, MSB+LSB));
   end function;
 
-
   function "+" (A : slogic; B : slogic) return slogic is
     variable v_SUM : signed(MSB+LSB downto 0);
   begin
@@ -80,7 +92,45 @@ package body slogic_pkg is
     -- if signed(v_SUM) < resize(signed(S_MINVALUE), 2*(MSB+LSB)) then
     --   return S_MINVALUE;
     -- end if;
-    return slogic(resize(signed(v_SUM), MSB+LSB));
+    return slogic(resize(v_SUM, MSB+LSB));
+  end function;
+
+  function "-" (A : slogic; B : slogic) return slogic is
+    variable v_SUB : signed(MSB+LSB downto 0);
+  begin
+    v_SUB := resize(signed(A), MSB+LSB+1) - resize(signed(B), MSB+LSB+1);
+    return slogic(resize(v_SUB, MSB+LSB));
+  end function;
+
+  function "-" (A : slogic) return slogic is
+  begin
+    return slogic(-signed(A));
+  end function;
+
+  function shift_left (A : slogic; QT : integer) return slogic is
+  begin
+    return slogic(shift_left(signed(A), QT));
+  end function;
+
+  function shift_right (A : slogic; QT : integer) return slogic is
+  begin
+    return slogic(shift_right(signed(A), QT));
+  end function;
+
+  function "/" (A : slogic; B : slogic) return slogic is
+    variable v_RES : signed(MSB+2*LSB-1 downto 0);
+  begin
+    v_RES := shift_left(resize(signed(A), MSB+2*LSB), LSB) / resize(signed(B), MSB+2*LSB);
+
+    -- check overflow
+    -- if signed(v_SUM) > resize(signed(S_MAXVALUE), 2*(MSB+LSB)) then
+    --   return S_MAXVALUE;
+    -- end if;
+    -- -- check underflow
+    -- if signed(v_SUM) < resize(signed(S_MINVALUE), 2*(MSB+LSB)) then
+    --   return S_MINVALUE;
+    -- end if;
+    return slogic(resize(v_RES, MSB+LSB));
   end function;
 
   function "<" (A : slogic; B : slogic) return boolean is

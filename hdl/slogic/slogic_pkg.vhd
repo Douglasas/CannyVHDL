@@ -165,7 +165,6 @@ package body slogic_pkg is
 
   -- make a parallel implementation of add_reduce for slogic --- SIZE must be multiple of 2
   function sum_reduce(A : slogic_vec; SIZE : integer) return slogic is
-    variable acc : slogic := (others => '0');
     variable result : slogic_vec(SIZE/2-1 downto 0);
   begin
     if SIZE = 1 then

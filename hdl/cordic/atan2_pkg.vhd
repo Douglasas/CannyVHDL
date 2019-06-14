@@ -10,6 +10,21 @@ package atan2_pkg is
   constant ANGLES_TABLE_SIZE : integer := 20; -- also (cycles-2)
   ------ functions ------
   function gen_angles_table(SIZE : integer) return slogic_vec;
+  
+  component atan2
+  port (
+    -- inputs
+    numx_i  : in slogic;
+    numy_i  : in slogic;
+    -- sync
+    enable_i : in std_logic;
+    clk_i    : in std_logic;
+	 rstn_i	 :	in	std_logic;
+    -- outputs
+    angle_o  : out slogic
+  );
+  end component atan2;
+  
 end package;
 
 package body atan2_pkg is

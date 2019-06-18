@@ -5,7 +5,7 @@ use ieee.numeric_std.all;
 library work;
 use work.slogic_pkg.all;
 use work.gaussian_pkg.all;
-
+--------------- libery de leitura e escrita de arquivo
 use std.textio.all;
 use ieee.std_logic_textio.all;
 

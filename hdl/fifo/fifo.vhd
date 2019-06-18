@@ -74,3 +74,4 @@ begin
   full_o  <= full_w;
 
 end arch_fifo;
+

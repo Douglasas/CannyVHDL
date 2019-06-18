@@ -13,6 +13,7 @@ entity atan2 is
     -- sync
     enable_i : in std_logic;
     clk_i    : in std_logic;
+	 rstn_i	 :	in	std_logic;
     -- outputs
     angle_o  : out slogic
   );
@@ -35,9 +36,10 @@ architecture arch of atan2 is
 
   signal angle_out_w : slogic;
   signal angle_out_r : slogic;
+  signal	conectar_rst: std_logic := '0';
 
 begin
-
+	conectar_rst <= rstn_i;
   -- get inputs
   p_INPUTS : process(clk_i)
   begin

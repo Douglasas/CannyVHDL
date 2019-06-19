@@ -51,7 +51,7 @@ begin
       semi_result_w( i*WINDOW_Y + j ) <= window_mult_w(i,j);
     end generate;
   end generate;
-	semi_result_w( WINDOW_Y * WINDOW_X ) <= to_slogic(0);
+	--semi_result_w( WINDOW_Y * WINDOW_X ) <= to_slogic(0);
 
 	pix_o <= sum_reduce(semi_result_w, WINDOW_Y * WINDOW_X + 1);
 

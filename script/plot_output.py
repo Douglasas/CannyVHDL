@@ -5,8 +5,8 @@ import numpy as np
 from bitstring import Bits
 import math
 
+MSB = 12
 LSB = 22
-MSB = 10
 
 def to_float(val: str) -> float:
     b = Bits('0b'+val, length=MSB+LSB)
@@ -21,12 +21,15 @@ def plot_dat(img_name: str):
     print('img length:', img_length)
     img_length = int(img_length)
 
-    img_res = np.zeros((img_length, img_length), dtype=np.uint8)
+    img_res = np.zeros((img_length, img_length), dtype=np.float)
     img_i = 0
     img_j = 0
 
     for line in img:
-        img_res[img_j][img_i] = round(to_float(line))
+        img_res[img_j][img_i] = to_float(line)
+
+        #if img_res[img_j][img_i] != 0:
+        #print(img_res[img_j][img_i])
 
         if img_i >= img_length-1:
             img_i = 0

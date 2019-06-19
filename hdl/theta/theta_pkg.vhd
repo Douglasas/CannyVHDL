@@ -11,52 +11,52 @@ package theta_pkg is
 	constant REGS_QT				: integer := 22;
 	constant SIZE_REGIS_COMP	: integer := SIZE_IMAGE;
 
-component theta_top is
-	port(
--------------input------------------
-		valid_i		:	in 	std_logic;
-		y_pix_i		:	in		slogic;
-		x_pix_i		:	in		slogic;
-		read_out_i	:	in 	std_logic;
--------------sync-------------------
-		rstn_i		:	in		std_logic;
-		clk_i			:	in		std_logic;
---------------output---------------
-		empty_o		:	out	std_logic;
-		theta_o		:	out	slogic
+  component theta_top is
+  	port(
+      -------------input------------------
+  		valid_i		:	in 	std_logic;
+  		y_pix_i		:	in		slogic;
+  		x_pix_i		:	in		slogic;
+  		read_out_i	:	in 	std_logic;
+      -------------sync-------------------
+  		rstn_i		:	in		std_logic;
+  		clk_i			:	in		std_logic;
+      --------------output---------------
+  		empty_o		:	out	std_logic;
+  		theta_o		:	out	slogic
 		);
 	end component theta_top;
-	
-component register1
-	generic(
-		TAMNHO_REGS : integer
-	);
-	port(
-------------imput----------------
-    set_i		:	in integer;
-	 valid_i		:	in std_logic;
-------------sync-----------------
-    rstn_i		:	in	std_logic;
-    clk_i 		:	in	std_logic; 
------------output----------------
-    regi_out	: 	out integer
-);
-END component register1;
 
-component register_desl
-	generic(
-		TAMNHO_REGS : integer
-	);
-	port(
-------------imput----------------
-    set_i		:	in std_logic;
-	 valid_i		:	in std_logic;
-------------sync-----------------
-    rstn_i		:	in	std_logic;
-    clk_i 		:	in	std_logic; 
------------output----------------
-    regis_out	: 	out std_logic
-);
-END component register_desl;
+  component register1
+  	generic(
+  		TAMNHO_REGS : integer
+  	);
+  	port(
+  ------------imput----------------
+      set_i		:	in integer;
+  	 valid_i		:	in std_logic;
+  ------------sync-----------------
+      rstn_i		:	in	std_logic;
+      clk_i 		:	in	std_logic;
+  -----------output----------------
+      regi_out	: 	out integer
+  );
+  end component register1;
+
+  component register_desl
+  	generic(
+  		TAMNHO_REGS : integer
+  	);
+  	port(
+  ------------imput----------------
+      set_i		:	in std_logic;
+  	 valid_i		:	in std_logic;
+  ------------sync-----------------
+      rstn_i		:	in	std_logic;
+      clk_i 		:	in	std_logic;
+  -----------output----------------
+      regis_out	: 	out std_logic
+  );
+  END component register_desl;
 
 end theta_pkg;

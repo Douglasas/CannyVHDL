@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from bitstring import Bits
 
-MSB = 10
+MSB = 12
 LSB = 22
 
 def to_fixed(val: float) -> str:

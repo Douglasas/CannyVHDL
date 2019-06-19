@@ -6,7 +6,7 @@ use ieee.math_real.all;
 package slogic_pkg is
 
   ---------------- Size Constants -------------
-  constant MSB : integer := 10;
+  constant MSB : integer := 12;
   constant LSB : integer := 22;
 
   --------------------- Type declaration --------------------

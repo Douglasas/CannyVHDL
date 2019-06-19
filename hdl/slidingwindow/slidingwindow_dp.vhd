@@ -43,6 +43,8 @@ architecture arch of slidingwindow_dp is
   constant PADY : integer := WINDOW_Y - 1;
   constant PADX : integer := WINDOW_X - 1;
 
+  signal delayed_en_r : std_logic;
+
   signal col_r      : integer range 0 to IMAGE_X+1;
   signal col_base_w : integer range 0 to IMAGE_X+1;
   signal col_inc_w  : integer range 0 to IMAGE_X+1;
@@ -94,9 +96,16 @@ begin
     window_o => window_o
   );
 
+  p_DELAY_EN : process(clk_i)
+  begin
+    if rising_edge(clk_i) then
+      delayed_en_r <= enable_i;
+    end if;
+  end process;
+
   col_max_o <= '1' when col_r >= IMAGE_X-2 else '0';
   lin_max_o <= '1' when lin_r >= IMAGE_Y-1 else '0';
 
-  valid_o <= '1' when col_r >= PADX and lin_r >= PADY and count_clr_i = '0' else '0';
+  valid_o <= '1' when col_r >= PADX and lin_r >= PADY and delayed_en_r = '1' and count_clr_i = '0' else '0';
 
 end architecture;

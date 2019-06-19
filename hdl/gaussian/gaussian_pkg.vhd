@@ -4,14 +4,15 @@ use ieee.numeric_std.all;
 use ieee.math_real.all;
 
 library work;
+use work.main_pkg.all;
 use work.slogic_pkg.all;
 
 package gaussian_pkg is
 	----------size--------------------
-	constant WINDOW_X : integer := 5;
-	constant WINDOW_Y : integer := 5;
-	constant IMAGE_X : integer := 220;
-	constant IMAGE_Y : integer := 220;
+	constant WINDOW_X : integer := 3;
+	constant WINDOW_Y : integer := 3;
+	constant IMAGE_X : integer := INPUT_IMAGE_X;
+	constant IMAGE_Y : integer := INPUT_IMAGE_Y;
 
   ------------function-----------------------
   function gen_gauss_kernel(SIZE : integer; SIGMA : integer := 1) return slogic_window;

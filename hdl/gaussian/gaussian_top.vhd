@@ -23,7 +23,7 @@ end gaussian_top;
 architecture arc of gaussian_top is
 
   ----------constant----------------
-	constant GAUS: slogic_window (WINDOW_Y-1 downto 0, WINDOW_X-1 downto 0) := gen_gauss_kernel(5);
+	constant GAUS: slogic_window (WINDOW_Y-1 downto 0, WINDOW_X-1 downto 0) := gen_gauss_kernel(WINDOW_X);
 
 	signal window_data_w : slogic_window(WINDOW_Y-1 downto 0, WINDOW_X-1 downto 0);
 	signal window_mult_w : slogic_window(WINDOW_Y-1 downto 0, WINDOW_X-1 downto 0);

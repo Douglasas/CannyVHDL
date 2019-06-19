@@ -2,14 +2,15 @@ library ieee;
 use ieee.std_logic_1164.all;
 
 library work;
+use work.main_pkg.all;
 use work.slogic_pkg.all;
 
 package normalization_pkg is
 
-  constant IMAGE_X  : integer := 5;
-  constant IMAGE_Y  : integer := 5;
   constant WINDOW_X : integer := 3;
   constant WINDOW_Y : integer := 3;
+  constant IMAGE_X  : integer := INPUT_IMAGE_X-4;
+  constant IMAGE_Y  : integer := INPUT_IMAGE_Y-4;
 
   component normalization_top
     port (

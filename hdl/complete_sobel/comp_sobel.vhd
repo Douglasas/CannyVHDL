@@ -8,7 +8,7 @@ use work.sobel_pkg.all;
 use work.gradient_pkg.all;
 use work.normalization_pkg.all;
 
-entity canny_top is
+entity comp_sobel_top is
   port (
     valid_i : in std_logic;
     pix_i   : in slogic;
@@ -21,7 +21,7 @@ entity canny_top is
   );
 end entity;
 
-architecture arch of canny_top is
+architecture arch of comp_sobel_top is
 
   signal gauss_valid_w : std_logic;
   signal gauss_pix_w   : slogic;

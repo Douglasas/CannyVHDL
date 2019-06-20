@@ -7,6 +7,10 @@ use work.gaussian_pkg.all;
 use work.sobel_pkg.all;
 use work.gradient_pkg.all;
 use work.normalization_pkg.all;
+use work.theta_pkg.all;
+use work.non_max_supress_pkg.all;
+use work.threshold_pkg.all;
+use work.hysteresis_pkg.all;
 
 entity canny_top is
   port (
@@ -32,6 +36,24 @@ architecture arch of canny_top is
 
   signal gradient_valid_w : std_logic;
   signal gradient_pix_w   : slogic;
+
+  signal normalization_valid_w : std_logic;
+  signal normalization_pix_w   : slogic;
+
+  signal dly_normalization_valid_w : std_logic;
+  signal dly_normalization_pix_w   : slogic;
+
+  signal theta_empty_w : std_logic;
+  signal theta_theta_w : slogic;
+
+  signal supress_valid_w : std_logic;
+  signal supress_pix_w : slogic;
+
+  signal threshold_valid_w : std_logic;
+  signal threshold_pix_w   : slogic;
+
+  signal hysteresis_valid_w : std_logic;
+  signal hysteresis_pix_w   : slogic;
 begin
 
   gaussian_top_i : gaussian_top
@@ -72,8 +94,66 @@ begin
     pix_i   => gradient_pix_w,
     clk_i   => clk_i,
     rstn_i  => rstn_i,
-    valid_o => valid_o,
-    pix_o   => pix_o
+    valid_o => normalization_valid_w,
+    pix_o   => normalization_pix_w
   );
+
+  p_DLY_NORM : process(clk_i, rstn_i)
+  begin
+    if rstn_i = '0' then
+      dly_normalization_valid_w <= '0';
+    elsif rising_edge(clk_i) then
+      dly_normalization_valid_w <= normalization_valid_w;
+      dly_normalization_pix_w <= normalization_pix_w;
+    end if;
+  end process;
+
+  theta_top_i : theta_top
+  port map (
+    valid_i    => sobel_valid_w,
+    x_pix_i    => sobel_x_pix_w,
+    y_pix_i    => sobel_y_pix_w,
+    read_out_i => normalization_valid_w,
+    rstn_i     => rstn_i,
+    clk_i      => clk_i,
+    empty_o    => theta_empty_w,
+    theta_o    => theta_theta_w
+  );
+
+  non_max_supress_top_i : non_max_supress_top
+  port map (
+    valid_i     => dly_normalization_valid_w,
+    pix_norm_i  => dly_normalization_pix_w,
+    pix_theta_i => theta_theta_w,
+    rstn_i      => rstn_i,
+    clk_i       => clk_i,
+    valid_o     => supress_valid_w,
+    pix_o       => supress_pix_w
+  );
+
+  threshold_top_i : threshold_top
+  port map (
+    valid_i => supress_valid_w,
+    pix_i   => supress_pix_w,
+    rstn_i  => rstn_i,
+    clk_i   => clk_i,
+    valid_o => threshold_valid_w,
+    pix_o   => threshold_pix_w
+  );
+
+  hysteresis_top_i : hysteresis_top
+  port map (
+    valid_i => threshold_valid_w,
+    pix_i   => threshold_pix_w,
+    rstn_i  => rstn_i,
+    clk_i   => clk_i,
+    valid_o => hysteresis_valid_w,
+    pix_o   => hysteresis_pix_w
+  );
+
+
+
+  valid_o <= hysteresis_valid_w;
+  pix_o <= hysteresis_pix_w;
 
 end architecture;

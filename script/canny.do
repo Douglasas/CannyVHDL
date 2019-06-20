@@ -28,6 +28,10 @@ add wave -noupdate /normalization_pkg/IMAGE_X
 add wave -noupdate /normalization_pkg/IMAGE_Y
 add wave -noupdate /img_canny_tb/canny_top_i/normalization_top_i/normalization_dp_i/u3_fifo/size_r
 add wave -noupdate /img_canny_tb/canny_top_i/normalization_top_i/dc_full_w
+add wave -noupdate -divider Theta
+add wave -noupdate -radix decimal /img_canny_tb/canny_top_i/theta_top_i/fifo_i/write_i
+add wave -noupdate -radix decimal /img_canny_tb/canny_top_i/theta_top_i/fifo_i/data_i
+add wave -noupdate -radix decimal /img_canny_tb/canny_top_i/theta_top_i/fifo_i/fifo_r
 TreeUpdate [SetDefaultTree]
 WaveRestoreCursors {{Cursor 1} {479800 ps} 0}
 quietly wave cursor active 1
@@ -45,4 +49,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ps
 update
-WaveRestoreZoom {479681 ps} {479931 ps}
+WaveRestoreZoom {0 ps} {375 ps}

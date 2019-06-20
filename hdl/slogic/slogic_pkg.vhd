@@ -6,7 +6,7 @@ use ieee.math_real.all;
 package slogic_pkg is
 
   ---------------- Size Constants -------------
-  constant MSB : integer := 12;
+  constant MSB : integer := 10;
   constant LSB : integer := 22;
 
   --------------------- Type declaration --------------------
@@ -50,7 +50,7 @@ package body slogic_pkg is
   ---- converts real number to slogic
   function to_slogic(R : real) return slogic is
   begin
-    return slogic(to_signed(integer(round(R * (real(2)**LSB))), MSB+LSB));
+    return slogic(to_signed(integer(round(R * (2.0**LSB))), MSB+LSB));
   end function;
 
   ---- performs a fixed point multiplication

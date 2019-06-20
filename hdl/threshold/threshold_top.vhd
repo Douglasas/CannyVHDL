@@ -7,7 +7,7 @@ use work.threshold_pkg.all;
 use work.slogic_pkg.all;
 
 entity threshold_top is
-  
+
   port (
 	-----------input----------
 		valid_i	:	in std_logic;
@@ -23,51 +23,17 @@ end threshold_top;
 
 architecture arch_threshold_top of threshold_top is
 
-	--signal window_data_w					: 	slogic_window (WINDOW_X -1 downto 0 , WINDOW_Y -1 downto 0);
-	signal valid_w							:	std_logic;
-	
-	signal pix_i_high						:	slogic;
-	signal pix_i_low						:	slogic;
-	
-	signal pix_i_high_result			:	std_logic;
-	signal pix_i_low_result				:	std_logic;
-	signal and_result						:	std_logic;
-	signal exit_multiplex				:	slogic;
+  constant HIGH_THRESHOLD : slogic := to_slogic(38);
+	constant LOW_THRESHOLD 	: slogic := to_slogic(2);
+	constant WEAK           : slogic := to_slogic(75);
+	constant STRONG         : slogic := to_slogic(255);
 
-begin -- the logic
-	
-	-- Valid_i to valid_o
+begin
+
 	valid_o <= valid_i;
-	
-	-- Comparacao
-	--- high_THRESHOLD
-	pix_i_high <= pix_i;
-	process (pix_i_high)
-	begin
-		if pix_i_high >= to_slogic(HIGH_THRESHOLD) then
-			pix_i_high_result  <= '1';
-		else
-			pix_i_high_result  <= '0';
-      end if;
-	end process;
-	---low_THRESHOLD
-	pix_i_low <= pix_i;
-	process (pix_i_low)
-	begin
-		if pix_i_low >= to_slogic(LOW_THRESHOLD) then
-			pix_i_low_result  <= '1';
-		else
-			pix_i_low_result  <= '0';
-      end if;
-	end process;
 
-	--- AND  
-	and_result <= (not pix_i_high_result) and pix_i_low_result;
-	
-	--- Multiplex 4X1
-	exit_multiplex <= x"00000000" when (and_result = '0' and pix_i_high_result = '0')else
-							STRONG when (and_result = '0' and pix_i_high_result = '1') else
-							WEAK when (and_result = '1' and pix_i_high_result = '0') else
-							x"00000000";
-	
+  pix_o <= STRONG when pix_i >= HIGH_THRESHOLD else
+           WEAK   when pix_i >= LOW_THRESHOLD else
+           (others => '0');
+
 end arch_threshold_top;

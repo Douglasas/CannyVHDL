@@ -5,7 +5,7 @@ import numpy as np
 from bitstring import Bits
 import math
 
-MSB = 10
+MSB = 12
 LSB = 22
 
 def to_float(val: str) -> float:

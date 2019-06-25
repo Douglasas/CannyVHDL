@@ -34,6 +34,10 @@ architecture arch of canny_top is
   signal sobel_x_pix_w : slogic;
   signal sobel_y_pix_w : slogic;
 
+  signal d_sobel_valid_w : std_logic;
+  signal d_sobel_x_pix_w : slogic;
+  signal d_sobel_y_pix_w : slogic;
+
   signal gradient_valid_w : std_logic;
   signal gradient_pix_w   : slogic;
 
@@ -77,11 +81,25 @@ begin
     y_pix_o => sobel_y_pix_w
   );
 
+  p_PIPELINE_SOBEL : process(clk_i, rstn_i)
+  begin
+    if rstn_i = '0' then
+      d_sobel_valid_w <= '0';
+    elsif rising_edge(clk_i) then
+      d_sobel_valid_w <= sobel_valid_w;
+      d_sobel_x_pix_w <= sobel_x_pix_w;
+      d_sobel_y_pix_w <= sobel_y_pix_w;
+    end if;
+  end process;
+
+  -- valid_o <= d_sobel_valid_w;
+  -- pix_o <= d_sobel_x_pix_w;
+
   gradient_top_i : gradient_top
   port map (
-    valid_i => sobel_valid_w,
-    x_pix_i => sobel_x_pix_w,
-    y_pix_i => sobel_y_pix_w,
+    valid_i => d_sobel_valid_w,
+    x_pix_i => d_sobel_x_pix_w,
+    y_pix_i => d_sobel_y_pix_w,
     rstn_i  => rstn_i,
     clk_i   => clk_i,
     valid_o => gradient_valid_w,
@@ -110,9 +128,9 @@ begin
 
   theta_top_i : theta_top
   port map (
-    valid_i    => sobel_valid_w,
-    x_pix_i    => sobel_x_pix_w,
-    y_pix_i    => sobel_y_pix_w,
+    valid_i    => d_sobel_valid_w,
+    x_pix_i    => d_sobel_x_pix_w,
+    y_pix_i    => d_sobel_y_pix_w,
     read_out_i => normalization_valid_w,
     rstn_i     => rstn_i,
     clk_i      => clk_i,
@@ -150,8 +168,6 @@ begin
     valid_o => hysteresis_valid_w,
     pix_o   => hysteresis_pix_w
   );
-
-
 
   valid_o <= hysteresis_valid_w;
   pix_o <= hysteresis_pix_w;

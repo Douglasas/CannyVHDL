@@ -20,7 +20,7 @@ architecture arch of img_canny_tb is
   file fil_out : text;
 
   signal valid : std_logic;
-  signal pix   : slogic;
+  signal pix   : slogic := (others => '0');
   signal valid_o : std_logic;
   signal pix_o : slogic;
 begin
@@ -33,6 +33,15 @@ begin
     variable v_data : slogic;
   begin
     wait for period/2;
+
+    -- pix <= (others => '0');
+    -- valid <= '1';
+    -- for i in 0 to 36 loop
+    --   pix <= pix + to_slogic(1);
+    --   wait for period;
+    -- end loop;
+    -- valid <= '0';
+
     file_open(fil_in, "../dat/img.dat", READ_MODE);
     valid <= '1';
     while not endfile(fil_in) loop
@@ -42,6 +51,7 @@ begin
       wait for period;
     end loop;
     valid <= '0';
+    
     wait;
   end process;
 

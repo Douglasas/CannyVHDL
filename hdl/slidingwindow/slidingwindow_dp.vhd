@@ -52,6 +52,8 @@ architecture arch of slidingwindow_dp is
   signal lin_r      : integer range 0 to IMAGE_Y+1;
   signal lin_base_w : integer range 0 to IMAGE_Y+1;
   signal lin_inc_w  : integer range 0 to IMAGE_Y+1;
+
+  signal window_transposed_w : slogic_window(WINDOW_X-1 downto 0, WINDOW_Y-1 downto 0);
 begin
 
   col_base_w <= 0 when col_zero_i = '1' else col_r;
@@ -93,8 +95,13 @@ begin
     pix_i    => pix_i,
     rstn_i   => rstn_i,
     clk_i    => clk_i,
-    window_o => window_o
+    window_o => window_transposed_w
   );
+  gen_TRANSPOSE_I : for i in 0 to WINDOW_Y-1 generate
+    gen_TRANSPOSE_J : for j in 0 to WINDOW_X-1 generate
+      window_o(i,j) <= window_transposed_w(j,i);
+    end generate;
+  end generate;
 
   p_DELAY_EN : process(clk_i)
   begin

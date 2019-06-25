@@ -28,6 +28,14 @@ architecture arc of gaussian_top is
 	signal window_data_w : slogic_window(WINDOW_Y-1 downto 0, WINDOW_X-1 downto 0);
 	signal window_mult_w : slogic_window(WINDOW_Y-1 downto 0, WINDOW_X-1 downto 0);
 	signal semi_result_w : slogic_vec(WINDOW_Y * WINDOW_X downto 0);
+
+  signal sw_valid_w : std_logic;
+
+  signal d_valid_w : std_logic;
+  signal d_pix_w   : slogic;
+
+	signal partial_semi_result_w : slogic_vec((WINDOW_Y * WINDOW_X+1)/2-1 downto 0);
+
 begin
 	slidingwindow_top_i : slidingwindow_top
 	  generic map (
@@ -41,7 +49,7 @@ begin
 		pix_i    => pix_i,
 		rstn_i   => rstn_i,
 		clk_i    => clk_i,
-		valid_o  => valid_o,
+		valid_o  => sw_valid_w,
 		window_o => window_data_w
 	  );
 
@@ -51,8 +59,19 @@ begin
       semi_result_w( i*WINDOW_Y + j ) <= window_mult_w(i,j);
     end generate;
   end generate;
-	--semi_result_w( WINDOW_Y * WINDOW_X ) <= to_slogic(0);
+	semi_result_w( WINDOW_Y * WINDOW_X ) <= to_slogic(0);
 
-	pix_o <= sum_reduce(semi_result_w, WINDOW_Y * WINDOW_X + 1);
+  p_PIPELINE_SUM : process(clk_i, rstn_i)
+  begin
+    if rstn_i = '0' then
+      d_valid_w <= '0';
+    elsif rising_edge(clk_i) then
+      d_valid_w <= sw_valid_w;
+      partial_semi_result_w <= partial_sum_reduce(semi_result_w, WINDOW_Y*WINDOW_X+1,(WINDOW_Y*WINDOW_X+1) / 2);
+    end if;
+  end process;
+
+  valid_o <= d_valid_w;
+	pix_o <= sum_reduce(partial_semi_result_w, (WINDOW_Y * WINDOW_X + 1)/2);
 
 end arc;

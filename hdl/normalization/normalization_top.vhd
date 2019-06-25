@@ -25,15 +25,13 @@ architecture arch of normalization_top is
 	signal dc_full_w  : std_logic;
   signal dc_empty_w : std_logic;
 begin
-
   normalization_ctrl_i : normalization_ctrl
   port map (
     full_i  => dc_full_w,
     empty_i => dc_empty_w,
     clk_i   => clk_i,
     rstn_i  => rstn_i,
-    read_o  => cd_read_w,
-    valid_o => valid_o
+    read_o  => cd_read_w
   );
 
   normalization_dp_i : normalization_dp
@@ -45,6 +43,7 @@ begin
     rstn_i  => rstn_i,
     full_o  => dc_full_w,
     empty_o => dc_empty_w,
+    valid_o => valid_o,
     pix_o   => pix_o
   );
 

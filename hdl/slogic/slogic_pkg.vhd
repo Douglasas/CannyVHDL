@@ -6,7 +6,7 @@ use ieee.math_real.all;
 package slogic_pkg is
 
   ---------------- Size Constants -------------
-  constant MSB : integer := 10;
+  constant MSB : integer := 12;
   constant LSB : integer := 22;
 
   --------------------- Type declaration --------------------
@@ -71,9 +71,9 @@ package body slogic_pkg is
     -- end if;
 
     -- round value
-    -- if (std_logic_vector(v_MULT(LSB-1 downto 0)) >= '1' & (LSB-2 downto 0 => '0')) then
-    --   v_RESULT := resize(shift_right(v_MULT, LSB) + 1, MSB+LSB);
-    --   return slogic(v_RESULT);
+
+    -- if v_MULT(LSB-1) = '1' then
+    --   v_RESULT := v_RESULT + 1 * 2**LSB;
     -- end if;
     v_RESULT := shift_right(v_MULT, LSB);
     return slogic(resize(v_RESULT, MSB+LSB));

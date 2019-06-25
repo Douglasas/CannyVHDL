@@ -12,8 +12,6 @@ package sobel_pkg is
 	constant WINDOW_Y : integer := 3;
 	constant IMAGE_X : integer := INPUT_IMAGE_X-2;
 	constant IMAGE_Y : integer := INPUT_IMAGE_Y-2;
-  ------------function-----------------------
-  function sum_reduct(semi_result_i : slogic_window) return slogic;
 
   component sobel_top
     port (
@@ -26,20 +24,4 @@ package sobel_pkg is
       y_pix_o : out slogic
     );
   end component sobel_top;
-end sobel_pkg;
-
-package body sobel_pkg is
-		function sum_reduct(semi_result_i: slogic_window ) return slogic is
-		variable res_v : slogic;
-
-begin
-  res_v := (others => '0' );
-		for i in semi_result_i'range loop
-			for j in semi_result_i'range loop
-				res_v := res_v + semi_result_i(i,j);
-			end loop;
-		end loop;
-		return res_v;
-	end function;
-
 end sobel_pkg;

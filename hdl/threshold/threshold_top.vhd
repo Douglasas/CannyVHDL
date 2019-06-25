@@ -23,8 +23,8 @@ end threshold_top;
 
 architecture arch_threshold_top of threshold_top is
 
-  constant HIGH_THRESHOLD : slogic := to_slogic(38);
-	constant LOW_THRESHOLD 	: slogic := to_slogic(2);
+  constant HIGH_THRESHOLD : slogic := to_slogic(0.15);
+	constant LOW_THRESHOLD 	: slogic := to_slogic(0.0075);
 	constant WEAK           : slogic := to_slogic(75);
 	constant STRONG         : slogic := to_slogic(255);
 

@@ -1,7 +1,7 @@
 -- megafunction wizard: %LPM_DIVIDE%
 -- GENERATION: STANDARD
 -- VERSION: WM1.0
--- MODULE: LPM_DIVIDE 
+-- MODULE: LPM_DIVIDE
 
 -- ============================================================
 -- File Name: div.vhd
@@ -19,17 +19,17 @@
 
 
 --Copyright (C) 1991-2014 Altera Corporation
---Your use of Altera Corporation's design tools, logic functions 
---and other software and tools, and its AMPP partner logic 
---functions, and any output files from any of the foregoing 
---(including device programming or simulation files), and any 
---associated documentation or information are expressly subject 
---to the terms and conditions of the Altera Program License 
---Subscription Agreement, Altera MegaCore Function License 
---Agreement, or other applicable license agreement, including, 
---without limitation, that your use is for the sole purpose of 
---programming logic devices manufactured by Altera and sold by 
---Altera or its authorized distributors.  Please refer to the 
+--Your use of Altera Corporation's design tools, logic functions
+--and other software and tools, and its AMPP partner logic
+--functions, and any output files from any of the foregoing
+--(including device programming or simulation files), and any
+--associated documentation or information are expressly subject
+--to the terms and conditions of the Altera Program License
+--Subscription Agreement, Altera MegaCore Function License
+--Agreement, or other applicable license agreement, including,
+--without limitation, that your use is for the sole purpose of
+--programming logic devices manufactured by Altera and sold by
+--Altera or its authorized distributors.  Please refer to the
 --applicable agreement for further details.
 
 
@@ -39,23 +39,27 @@ USE ieee.std_logic_1164.all;
 LIBRARY lpm;
 USE lpm.all;
 
+library work;
+use work.slogic_pkg.all;
+use work.normalization_pkg.all;
+
 ENTITY div IS
 	PORT
 	(
 		clken		: IN STD_LOGIC ;
 		clock		: IN STD_LOGIC ;
-		denom		: IN STD_LOGIC_VECTOR (31 DOWNTO 0);
-		numer		: IN STD_LOGIC_VECTOR (31 DOWNTO 0);
-		quotient		: OUT STD_LOGIC_VECTOR (31 DOWNTO 0);
-		remain		: OUT STD_LOGIC_VECTOR (31 DOWNTO 0)
+		denom		: IN STD_LOGIC_VECTOR (MSB+2*LSB-1 DOWNTO 0);
+		numer		: IN STD_LOGIC_VECTOR (MSB+2*LSB-1 DOWNTO 0);
+		quotient		: OUT STD_LOGIC_VECTOR (MSB+2*LSB-1 DOWNTO 0);
+		remain		: OUT STD_LOGIC_VECTOR (MSB+2*LSB-1 DOWNTO 0)
 	);
 END div;
 
 
 ARCHITECTURE SYN OF div IS
 
-	SIGNAL sub_wire0	: STD_LOGIC_VECTOR (31 DOWNTO 0);
-	SIGNAL sub_wire1	: STD_LOGIC_VECTOR (31 DOWNTO 0);
+	SIGNAL sub_wire0	: STD_LOGIC_VECTOR (MSB+2*LSB-1 DOWNTO 0);
+	SIGNAL sub_wire1	: STD_LOGIC_VECTOR (MSB+2*LSB-1 DOWNTO 0);
 
 
 
@@ -71,27 +75,27 @@ ARCHITECTURE SYN OF div IS
 	);
 	PORT (
 			clock	: IN STD_LOGIC ;
-			remain	: OUT STD_LOGIC_VECTOR (31 DOWNTO 0);
+			remain	: OUT STD_LOGIC_VECTOR (MSB+2*LSB-1 DOWNTO 0);
 			clken	: IN STD_LOGIC ;
-			denom	: IN STD_LOGIC_VECTOR (31 DOWNTO 0);
-			numer	: IN STD_LOGIC_VECTOR (31 DOWNTO 0);
-			quotient	: OUT STD_LOGIC_VECTOR (31 DOWNTO 0)
+			denom	: IN STD_LOGIC_VECTOR (MSB+2*LSB-1 DOWNTO 0);
+			numer	: IN STD_LOGIC_VECTOR (MSB+2*LSB-1 DOWNTO 0);
+			quotient	: OUT STD_LOGIC_VECTOR (MSB+2*LSB-1 DOWNTO 0)
 	);
 	END COMPONENT;
 
 BEGIN
-	remain    <= sub_wire0(31 DOWNTO 0);
-	quotient    <= sub_wire1(31 DOWNTO 0);
+	remain    <= sub_wire0(MSB+2*LSB-1 DOWNTO 0);
+	quotient    <= sub_wire1(MSB+2*LSB-1 DOWNTO 0);
 
 	LPM_DIVIDE_component : LPM_DIVIDE
 	GENERIC MAP (
 		lpm_drepresentation => "SIGNED",
 		lpm_hint => "LPM_REMAINDERPOSITIVE=FALSE",
 		lpm_nrepresentation => "SIGNED",
-		lpm_pipeline => 10,
+		lpm_pipeline => QT_DIV_CYCLES,
 		lpm_type => "LPM_DIVIDE",
-		lpm_widthd => 32,
-		lpm_widthn => 32
+		lpm_widthd => MSB+2*LSB,
+		lpm_widthn => MSB+2*LSB
 	)
 	PORT MAP (
 		clock => clock,

@@ -53,6 +53,9 @@ architecture arch of canny_top is
   signal supress_valid_w : std_logic;
   signal supress_pix_w : slogic;
 
+  signal d_supress_valid_w : std_logic;
+  signal d_supress_pix_w : slogic;
+
   signal threshold_valid_w : std_logic;
   signal threshold_pix_w   : slogic;
 
@@ -149,10 +152,20 @@ begin
     pix_o       => supress_pix_w
   );
 
+  p_PIPELINE_SUPRESS : process(clk_i, rstn_i)
+  begin
+    if rstn_i = '0' then
+      d_supress_valid_w <= '0';
+    elsif rising_edge(clk_i) then
+      d_supress_valid_w <= supress_valid_w;
+      d_supress_pix_w   <= supress_pix_w;
+    end if;
+  end process;
+
   threshold_top_i : threshold_top
   port map (
-    valid_i => supress_valid_w,
-    pix_i   => supress_pix_w,
+    valid_i => d_supress_valid_w,
+    pix_i   => d_supress_pix_w,
     rstn_i  => rstn_i,
     clk_i   => clk_i,
     valid_o => threshold_valid_w,

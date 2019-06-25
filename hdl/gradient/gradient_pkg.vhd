@@ -13,7 +13,7 @@ package gradient_pkg is
 	constant IMAGE_X : integer := INPUT_IMAGE_X-4;
 	constant IMAGE_Y : integer := INPUT_IMAGE_Y-4;
 	----------Constants----------------
-	constant QT_SQRT_CYCLES : integer := 10;
+	constant QT_SQRT_CYCLES : integer := 20;
 
   component gradient_top
     port (

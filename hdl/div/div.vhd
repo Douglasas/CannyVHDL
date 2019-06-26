@@ -90,7 +90,7 @@ BEGIN
 	LPM_DIVIDE_component : LPM_DIVIDE
 	GENERIC MAP (
 		lpm_drepresentation => "SIGNED",
-		lpm_hint => "LPM_REMAINDERPOSITIVE=FALSE",
+		lpm_hint => "MAXIMIZE_SPEED=6,LPM_REMAINDERPOSITIVE=FALSE",
 		lpm_nrepresentation => "SIGNED",
 		lpm_pipeline => QT_DIV_CYCLES,
 		lpm_type => "LPM_DIVIDE",

@@ -43,6 +43,8 @@ architecture arch of slidingwindow_dp is
   constant PADY : integer := WINDOW_Y - 1;
   constant PADX : integer := WINDOW_X - 1;
 
+  signal delayed_en_r : std_logic;
+
   signal col_r      : integer range 0 to IMAGE_X+1;
   signal col_base_w : integer range 0 to IMAGE_X+1;
   signal col_inc_w  : integer range 0 to IMAGE_X+1;
@@ -50,6 +52,8 @@ architecture arch of slidingwindow_dp is
   signal lin_r      : integer range 0 to IMAGE_Y+1;
   signal lin_base_w : integer range 0 to IMAGE_Y+1;
   signal lin_inc_w  : integer range 0 to IMAGE_Y+1;
+
+  signal window_transposed_w : slogic_window(WINDOW_X-1 downto 0, WINDOW_Y-1 downto 0);
 begin
 
   col_base_w <= 0 when col_zero_i = '1' else col_r;
@@ -91,12 +95,24 @@ begin
     pix_i    => pix_i,
     rstn_i   => rstn_i,
     clk_i    => clk_i,
-    window_o => window_o
+    window_o => window_transposed_w
   );
+  gen_TRANSPOSE_I : for i in 0 to WINDOW_Y-1 generate
+    gen_TRANSPOSE_J : for j in 0 to WINDOW_X-1 generate
+      window_o(i,j) <= window_transposed_w(j,i);
+    end generate;
+  end generate;
+
+  p_DELAY_EN : process(clk_i)
+  begin
+    if rising_edge(clk_i) then
+      delayed_en_r <= enable_i;
+    end if;
+  end process;
 
   col_max_o <= '1' when col_r >= IMAGE_X-2 else '0';
   lin_max_o <= '1' when lin_r >= IMAGE_Y-1 else '0';
 
-  valid_o <= '1' when col_r >= PADX and lin_r >= PADY and count_clr_i = '0' else '0';
+  valid_o <= '1' when col_r >= PADX and lin_r >= PADY and delayed_en_r = '1' and count_clr_i = '0' else '0';
 
 end architecture;

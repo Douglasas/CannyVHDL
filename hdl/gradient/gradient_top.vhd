@@ -29,14 +29,16 @@ architecture arch of gradient_top is
   signal w_sqrt_res  : STD_LOGIC_VECTOR(MSB+LSB-1 downto 0);
 begin
 
-  p_SHIFT : process(clk_i)
+  p_SHIFT : process(clk_i, rstn_i)
   begin
-    if (rising_edge(clk_i)) then
-      r_fila <= r_fila(8 downto 0) & valid_i;
+    if rstn_i = '0' then
+      r_fila <= (others => '0');
+    elsif (rising_edge(clk_i)) then
+      r_fila <= r_fila(QT_SQRT_CYCLES-2 downto 0) & valid_i;
     end if;
-  end process; -- p_atual
+  end process;
 
-  valid_o <= r_fila(9);
+  valid_o <= r_fila(QT_SQRT_CYCLES-1);
 
   w_radical <= std_logic_vector((signed(x_pix_i) * signed(x_pix_i)) + (signed(y_pix_i) * signed(y_pix_i)));
   sqrtip_inst : sqrtip

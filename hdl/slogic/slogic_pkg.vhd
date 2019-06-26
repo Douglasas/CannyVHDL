@@ -6,7 +6,7 @@ use ieee.math_real.all;
 package slogic_pkg is
 
   ---------------- Size Constants -------------
-  constant MSB : integer := 10;
+  constant MSB : integer := 12;
   constant LSB : integer := 22;
 
   --------------------- Type declaration --------------------
@@ -50,7 +50,7 @@ package body slogic_pkg is
   ---- converts real number to slogic
   function to_slogic(R : real) return slogic is
   begin
-    return slogic(to_signed(integer(round(R * (real(2)**LSB))), MSB+LSB));
+    return slogic(to_signed(integer(round(R * (2.0**LSB))), MSB+LSB));
   end function;
 
   ---- performs a fixed point multiplication
@@ -71,9 +71,9 @@ package body slogic_pkg is
     -- end if;
 
     -- round value
-    -- if (std_logic_vector(v_MULT(LSB-1 downto 0)) >= '1' & (LSB-2 downto 0 => '0')) then
-    --   v_RESULT := resize(shift_right(v_MULT, LSB) + 1, MSB+LSB);
-    --   return slogic(v_RESULT);
+
+    -- if v_MULT(LSB-1) = '1' then
+    --   v_RESULT := v_RESULT + 1 * 2**LSB;
     -- end if;
     v_RESULT := shift_right(v_MULT, LSB);
     return slogic(resize(v_RESULT, MSB+LSB));
@@ -165,7 +165,6 @@ package body slogic_pkg is
 
   -- make a parallel implementation of add_reduce for slogic --- SIZE must be multiple of 2
   function sum_reduce(A : slogic_vec; SIZE : integer) return slogic is
-    variable acc : slogic := (others => '0');
     variable result : slogic_vec(SIZE/2-1 downto 0);
   begin
     if SIZE = 1 then

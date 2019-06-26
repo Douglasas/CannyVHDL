@@ -1,17 +1,19 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+
 library work;
+use work.main_pkg.all;
 use work.slogic_pkg.all;
 
 package gradient_pkg is
 	----------size--------------------
 	constant WINDOW_X : integer := 3;
 	constant WINDOW_Y : integer := 3;
-	constant IMAGE_X : integer := 220;
-	constant IMAGE_Y : integer := 220;
+	constant IMAGE_X : integer := INPUT_IMAGE_X-4;
+	constant IMAGE_Y : integer := INPUT_IMAGE_Y-4;
 	----------Constants----------------
-	constant QT_SQRT_CYCLES : integer := 10;
+	constant QT_SQRT_CYCLES : integer := 20;
 
   component gradient_top
     port (

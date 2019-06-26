@@ -26,11 +26,12 @@ begin
   process
   begin
     wait for period/2;
-
-    valid <= '1';
-    pix <= x"00000000";
+    pix <= (others => '0');
     for i in 0 to 24 loop
+      valid <= '1';
       pix <= pix + to_slogic(1);
+      wait for period;
+      valid <= '0';
       wait for period;
     end loop;
     valid <= '0';

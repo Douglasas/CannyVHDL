@@ -21,13 +21,11 @@ entity hysteresis_top is
 end hysteresis_top;
 
 architecture arc of hysteresis_top is
-	signal window_data_w					: 	slogic_window (WINDOW_X -1 downto 0 , WINDOW_Y -1 downto 0);
-	signal center_pix_w					:	slogic;
-	signal weak_result_w					:	std_logic;
-	signal strong_result_w				: 	std_logic;
-	signal control_mutplex_strong_w	:	std_logic;
-	signal mutplex_strong_result_w	:	slogic;
-	signal mutplex_result_o_w			:	slogic;
+	constant WEAK		:	slogic := to_slogic(75); -- 01C0 0000 = 7
+	constant STRONG	:	slogic := to_slogic(255); -- 0300 0000? = 12  --- 018A 1F00? = 30
+
+	signal window_data_w       : slogic_window (WINDOW_X -1 downto 0 , WINDOW_Y -1 downto 0);
+	signal strong_neighbours_w : std_logic;
 
 begin
 	slidingwindow_top_i : slidingwindow_top
@@ -44,45 +42,19 @@ begin
 		clk_i    => clk_i,
 		valid_o  => valid_o,
 		window_o => window_data_w
-	  );
+	);
+  -----------OR gigante ---------------------
+  strong_neighbours_w <= '1' when window_data_w (0,0) = STRONG else
+							           '1' when window_data_w (0,1) = STRONG else
+							           '1' when window_data_w (0,2) = STRONG else
+							           '1' when window_data_w (1,0) = STRONG else
+							           '1' when window_data_w (1,2) = STRONG else
+							           '1' when window_data_w (2,0) = STRONG else
+							           '1' when window_data_w (2,1) = STRONG else
+							           '1' when window_data_w (2,2) = STRONG else
+							           '0';
 
-	  ------------Verifica se o centro e igual a weak---------------
-	  center_pix_w <= window_data_w (1,1);
-	  weak_result_w <= 	'1' when center_pix_w = WAEK else
-								'0' when center_pix_w /= WAEK else
-								'0';
-
-	  -----------OR gigante ---------------------
-	  strong_result_w <= '1' when window_data_w (0,0) = STRONG else
-								'1' when window_data_w (0,1) = STRONG else
-								'1' when window_data_w (0,2) = STRONG else
-								'1' when window_data_w (1,0) = STRONG else
-								'1' when window_data_w (1,2) = STRONG else
-								'1' when window_data_w (2,0) = STRONG else
-								'1' when window_data_w (2,1) = STRONG else
-								'1' when window_data_w (2,2) = STRONG else
-								'0';
-
-
-	  control_mutplex_strong_w <= weak_result_w and strong_result_w;
-
-	  process (control_mutplex_strong_w)
-			begin
-				case control_mutplex_strong_w is
-						when '0' => mutplex_strong_result_w <= x"00000000";
-						when '1' => mutplex_strong_result_w <= STRONG;
-						when others => mutplex_strong_result_w <=x"00000000";
-				end case;
-		end process;
-
-		process (weak_result_w, center_pix_w, mutplex_strong_result_w)
-			begin
-				case weak_result_w is
-						when '0' => mutplex_result_o_w <= center_pix_w;
-						when '1' => mutplex_result_o_w <= mutplex_strong_result_w;
-						  when others => mutplex_result_o_w <= (others => '0');
-				end case;
-		end process;
-
-		pix_o <= mutplex_result_o_w;
+  pix_o <= STRONG when window_data_w (1,1) = STRONG else
+           STRONG when window_data_w (1,1) = WEAK and strong_neighbours_w = '1' else
+           (others => '0');
 end arc;

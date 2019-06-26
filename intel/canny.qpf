@@ -18,13 +18,13 @@
 #
 # Quartus II 64-Bit
 # Version 13.1.4 Build 182 03/12/2014 SJ Web Edition
-# Date created = 19:03:38  June 18, 2019
+# Date created = 02:32:06  June 20, 2019
 #
 # -------------------------------------------------------------------------- #
 
 QUARTUS_VERSION = "13.1"
-DATE = "19:03:38  June 18, 2019"
+DATE = "02:32:06  June 20, 2019"
 
 # Revisions
 
-PROJECT_REVISION = "sqrtip"
+PROJECT_REVISION = "canny_top"

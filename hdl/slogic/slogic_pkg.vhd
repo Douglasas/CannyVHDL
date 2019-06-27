@@ -33,8 +33,8 @@ package slogic_pkg is
   function partial_sum_reduce(A : slogic_vec; SIZE : integer; STOP_POINT : integer) return slogic_vec;
 
   ----------------- Constants -------------
-  constant S_MAXVALUE : slogic := '0' & (MSB+LSB-2 downto 0 => '1');
-  constant S_MINVALUE : slogic := '1' & (MSB+LSB-2 downto 0 => '0');
+  constant S_MAXVALUE : slogic := (MSB+LSB-1 => '0', others => '1');
+  constant S_MINVALUE : slogic := (MSB+LSB-1 => '1', others => '0');
 
 end slogic_pkg;
 

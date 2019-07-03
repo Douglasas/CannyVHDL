@@ -22,6 +22,7 @@ package slogic_pkg is
   function "+" (A : slogic; B : slogic) return slogic;
   function "-" (A : slogic; B : slogic) return slogic;
   function "-" (A : slogic) return slogic;
+  function absolute (A : slogic) return slogic;
   function shift_left (A : slogic; QT : integer) return slogic;
   function shift_right (A : slogic; QT : integer) return slogic;
   function "<" (A : slogic; B : slogic) return boolean;
@@ -105,6 +106,11 @@ package body slogic_pkg is
   function "-" (A : slogic) return slogic is
   begin
     return slogic(-signed(A));
+  end function;
+
+  function absolute (A : slogic) return slogic is
+  begin
+    return slogic(abs(signed(A)));
   end function;
 
   function shift_left (A : slogic; QT : integer) return slogic is

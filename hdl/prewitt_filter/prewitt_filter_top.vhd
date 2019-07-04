@@ -5,10 +5,10 @@ library work;
 use work.slogic_pkg.all;
 use work.gaussian_pkg.all;
 use work.sobel_pkg.all;
+use work.prewitt_pkg.all;
 use work.gradient_pkg.all;
-use work.normalization_pkg.all;
 
-entity comp_sobel_top is
+entity prewitt_filter_top is
   port (
     valid_i : in std_logic;
     pix_i   : in slogic;
@@ -21,17 +21,18 @@ entity comp_sobel_top is
   );
 end entity;
 
-architecture arch of comp_sobel_top is
+architecture arch of prewitt_filter_top is
 
   signal gauss_valid_w : std_logic;
   signal gauss_pix_w   : slogic;
 
-  signal sobel_valid_w : std_logic;
-  signal sobel_x_pix_w : slogic;
-  signal sobel_y_pix_w : slogic;
+  signal prewitt_valid_w : std_logic;
+  signal prewitt_x_pix_w : slogic;
+  signal prewitt_y_pix_w : slogic;
 
   signal gradient_valid_w : std_logic;
   signal gradient_pix_w   : slogic;
+
 begin
 
   gaussian_top_i : gaussian_top
@@ -44,36 +45,29 @@ begin
     pix_o   => gauss_pix_w
   );
 
-  sobel_top_i : sobel_top
+  prewitt_top_i : sobel_top
   port map (
     valid_i => gauss_valid_w,
     pix_i   => gauss_pix_w,
     rstn_i  => rstn_i,
     clk_i   => clk_i,
-    valid_o => sobel_valid_w,
-    x_pix_o => sobel_x_pix_w,
-    y_pix_o => sobel_y_pix_w
+    valid_o => prewitt_valid_w,
+    x_pix_o => prewitt_x_pix_w,
+    y_pix_o => prewitt_y_pix_w
   );
 
   gradient_top_i : gradient_top
   port map (
-    valid_i => sobel_valid_w,
-    x_pix_i => sobel_x_pix_w,
-    y_pix_i => sobel_y_pix_w,
+    valid_i => prewitt_valid_w,
+    x_pix_i => prewitt_x_pix_w,
+    y_pix_i => prewitt_y_pix_w,
     rstn_i  => rstn_i,
     clk_i   => clk_i,
     valid_o => gradient_valid_w,
     pix_o   => gradient_pix_w
   );
 
-  normalization_top_i : normalization_top
-  port map (
-    valid_i => gradient_valid_w,
-    pix_i   => gradient_pix_w,
-    clk_i   => clk_i,
-    rstn_i  => rstn_i,
-    valid_o => valid_o,
-    pix_o   => pix_o
-  );
+  valid_o <= gradient_valid_w;
+  pix_o <= gradient_pix_w;
 
 end architecture;

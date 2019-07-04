@@ -42,7 +42,7 @@ begin
     -- end loop;
     -- valid <= '0';
 
-    file_open(fil_in, "../dat/img.dat", READ_MODE);
+    file_open(fil_in, "../../dat/img.dat", READ_MODE);
     valid <= '1';
     while not endfile(fil_in) loop
       readline(fil_in, v_LINE);
@@ -51,14 +51,14 @@ begin
       wait for period;
     end loop;
     valid <= '0';
-    
+
     wait;
   end process;
 
   p_RES : process
     variable v_line : line;
   begin
-    file_open(fil_out, "../dat/canny_out.dat", WRITE_MODE);
+    file_open(fil_out, "../../dat/canny_out.dat", WRITE_MODE);
 
     while true loop
       wait until rising_edge(clk);

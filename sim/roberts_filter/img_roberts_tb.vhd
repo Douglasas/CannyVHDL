@@ -4,15 +4,15 @@ use ieee.numeric_std.all;
 
 library work;
 use work.slogic_pkg.all;
-use work.gaussian_pkg.all;
---------------- libery de leitura e escrita de arquivo
+use work.roberts_filter_pkg.all;
+
 use std.textio.all;
 use ieee.std_logic_textio.all;
 
-entity img_gaus_tb is
+entity img_roberts_tb is
 end entity;
 
-architecture arch of img_gaus_tb is
+architecture arch of img_roberts_tb is
   constant period : time := 10 ps;
   signal rstn : std_logic := '0';
   signal clk : std_logic := '1';
@@ -20,7 +20,7 @@ architecture arch of img_gaus_tb is
   file fil_out : text;
 
   signal valid : std_logic;
-  signal pix   : slogic;
+  signal pix   : slogic := (others => '0');
   signal valid_o : std_logic;
   signal pix_o : slogic;
 begin
@@ -33,6 +33,7 @@ begin
     variable v_data : slogic;
   begin
     wait for period/2;
+
     file_open(fil_in, "../../dat/img.dat", READ_MODE);
     valid <= '1';
     while not endfile(fil_in) loop
@@ -42,13 +43,14 @@ begin
       wait for period;
     end loop;
     valid <= '0';
+
     wait;
   end process;
 
   p_RES : process
     variable v_line : line;
   begin
-    file_open(fil_out, "../../dat/gauss_out.dat", WRITE_MODE);
+    file_open(fil_out, "../../dat/roberts_out.dat", WRITE_MODE);
 
     while true loop
       wait until rising_edge(clk);
@@ -60,12 +62,12 @@ begin
     wait;
   end process;
 
-  gaussian_top_i : gaussian_top
+  roberts_filter_top_i : roberts_filter_top
   port map (
     valid_i => valid,
     pix_i   => pix,
-    rstn_i  => rstn,
     clk_i   => clk,
+    rstn_i  => rstn,
     valid_o => valid_o,
     pix_o   => pix_o
   );

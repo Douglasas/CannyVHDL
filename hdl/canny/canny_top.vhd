@@ -95,9 +95,6 @@ begin
     end if;
   end process;
 
-  -- valid_o <= d_sobel_valid_w;
-  -- pix_o <= d_sobel_x_pix_w;
-
   gradient_top_i : gradient_top
   port map (
     valid_i => d_sobel_valid_w,

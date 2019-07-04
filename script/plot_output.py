@@ -34,7 +34,13 @@ def plot_dat(img_name: str):
         else:
             img_i += 1
 
-    plt.imshow(img_res*255, cmap='gray')
+    plt.imshow(img_res, cmap='gray')
     plt.show()
 
-plot_dat("../dat/canny_out.dat")
+import glob
+path = "../dat"
+files = [f for f in glob.glob(path + "**/*.dat", recursive=False)]
+for i, f in enumerate(files):
+    print(str(i)+")", f)
+sel = int(input("Choose a file: "))
+plot_dat(files[sel])

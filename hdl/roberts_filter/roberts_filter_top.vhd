@@ -4,11 +4,10 @@ use ieee.std_logic_1164.all;
 library work;
 use work.slogic_pkg.all;
 use work.gaussian_pkg.all;
-use work.sobel_pkg.all;
+use work.roberts_pkg.all;
 use work.gradient_pkg.all;
-use work.normalization_pkg.all;
 
-entity comp_sobel_top is
+entity roberts_filter_top is
   port (
     valid_i : in std_logic;
     pix_i   : in slogic;
@@ -21,14 +20,14 @@ entity comp_sobel_top is
   );
 end entity;
 
-architecture arch of comp_sobel_top is
+architecture arch of roberts_filter_top is
 
   signal gauss_valid_w : std_logic;
   signal gauss_pix_w   : slogic;
 
-  signal sobel_valid_w : std_logic;
-  signal sobel_x_pix_w : slogic;
-  signal sobel_y_pix_w : slogic;
+  signal roberts_valid_w : std_logic;
+  signal roberts_x_pix_w : slogic;
+  signal roberts_y_pix_w : slogic;
 
   signal gradient_valid_w : std_logic;
   signal gradient_pix_w   : slogic;
@@ -44,36 +43,29 @@ begin
     pix_o   => gauss_pix_w
   );
 
-  sobel_top_i : sobel_top
+  roberts_top_i : roberts_top
   port map (
     valid_i => gauss_valid_w,
     pix_i   => gauss_pix_w,
     rstn_i  => rstn_i,
     clk_i   => clk_i,
-    valid_o => sobel_valid_w,
-    x_pix_o => sobel_x_pix_w,
-    y_pix_o => sobel_y_pix_w
+    valid_o => roberts_valid_w,
+    x_pix_o => roberts_x_pix_w,
+    y_pix_o => roberts_y_pix_w
   );
 
   gradient_top_i : gradient_top
   port map (
-    valid_i => sobel_valid_w,
-    x_pix_i => sobel_x_pix_w,
-    y_pix_i => sobel_y_pix_w,
+    valid_i => roberts_valid_w,
+    x_pix_i => roberts_x_pix_w,
+    y_pix_i => roberts_y_pix_w,
     rstn_i  => rstn_i,
     clk_i   => clk_i,
     valid_o => gradient_valid_w,
     pix_o   => gradient_pix_w
   );
 
-  normalization_top_i : normalization_top
-  port map (
-    valid_i => gradient_valid_w,
-    pix_i   => gradient_pix_w,
-    clk_i   => clk_i,
-    rstn_i  => rstn_i,
-    valid_o => valid_o,
-    pix_o   => pix_o
-  );
+  valid_o <= gradient_valid_w;
+  pix_o <= gradient_pix_w;
 
 end architecture;

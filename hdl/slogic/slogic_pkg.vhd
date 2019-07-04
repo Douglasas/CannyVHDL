@@ -22,6 +22,7 @@ package slogic_pkg is
   function "+" (A : slogic; B : slogic) return slogic;
   function "-" (A : slogic; B : slogic) return slogic;
   function "-" (A : slogic) return slogic;
+  function absolute (A : slogic) return slogic;
   function shift_left (A : slogic; QT : integer) return slogic;
   function shift_right (A : slogic; QT : integer) return slogic;
   function "<" (A : slogic; B : slogic) return boolean;
@@ -33,8 +34,8 @@ package slogic_pkg is
   function partial_sum_reduce(A : slogic_vec; SIZE : integer; STOP_POINT : integer) return slogic_vec;
 
   ----------------- Constants -------------
-  constant S_MAXVALUE : slogic := '0' & (MSB+LSB-2 downto 0 => '1');
-  constant S_MINVALUE : slogic := '1' & (MSB+LSB-2 downto 0 => '0');
+  constant S_MAXVALUE : slogic := (MSB+LSB-1 => '0', others => '1');
+  constant S_MINVALUE : slogic := (MSB+LSB-1 => '1', others => '0');
 
 end slogic_pkg;
 
@@ -82,7 +83,8 @@ package body slogic_pkg is
   function "+" (A : slogic; B : slogic) return slogic is
     variable v_SUM : signed(MSB+LSB downto 0);
   begin
-    v_SUM := resize(signed(A), MSB+LSB+1) + resize(signed(B), MSB+LSB+1);
+    return slogic(signed(A)+signed(B));
+    --v_SUM := resize(signed(A), MSB+LSB+1) + resize(signed(B), MSB+LSB+1);
 
     -- check overflow
     -- if signed(v_SUM) > resize(signed(S_MAXVALUE), 2*(MSB+LSB)) then
@@ -92,7 +94,7 @@ package body slogic_pkg is
     -- if signed(v_SUM) < resize(signed(S_MINVALUE), 2*(MSB+LSB)) then
     --   return S_MINVALUE;
     -- end if;
-    return slogic(resize(v_SUM, MSB+LSB));
+    --return slogic(resize(v_SUM, MSB+LSB));
   end function;
 
   function "-" (A : slogic; B : slogic) return slogic is
@@ -105,6 +107,11 @@ package body slogic_pkg is
   function "-" (A : slogic) return slogic is
   begin
     return slogic(-signed(A));
+  end function;
+
+  function absolute (A : slogic) return slogic is
+  begin
+    return slogic(abs(signed(A)));
   end function;
 
   function shift_left (A : slogic; QT : integer) return slogic is

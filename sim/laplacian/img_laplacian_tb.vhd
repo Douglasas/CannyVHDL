@@ -19,6 +19,8 @@ architecture arch of img_laplacian_tb is
   file fil_in : text;
   file fil_out : text;
 
+  signal cycles_count : integer := 0;
+
   signal valid : std_logic;
   signal pix   : slogic := (others => '0');
   signal valid_o : std_logic;
@@ -27,6 +29,8 @@ begin
 
   clk <= not clk after period/2;
   rstn <= '1' after period/2;
+
+  cycles_count <= cycles_count + 1 after period;
 
   p_MAIN : process
     variable v_line : line;

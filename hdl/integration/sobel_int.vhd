@@ -1,0 +1,105 @@
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
+library work;
+use work.slogic_pkg.all;
+use work.fifo_pkg.all;
+use work.comp_sobel_pkg.all;
+
+entity sobel_int is
+  port (
+    write_i : in std_logic;
+    read_i  : in std_logic;
+    data_i  : in std_logic_vector(7 downto 0);
+
+    rstn_i  : in std_logic;
+    clk_i   : in std_logic;
+
+    empty_o : out std_logic;
+    full_o  : out std_logic;
+    data_o  : out std_logic_vector(7 downto 0)
+  );
+end entity;
+
+architecture arch of sobel_int is
+  signal write_r     : std_logic;
+  signal write_red_w : std_logic;
+  signal read_r      : std_logic;
+  signal read_red_w  : std_logic;
+
+  signal input_pix_w : slogic;
+  signal pix_valid_r : std_logic;
+
+  signal empty_fifo_in_w : std_logic;
+  signal full_fifo_in_w  : std_logic;
+  signal data_fifo_in_w : slogic;
+
+  signal filter_valid_w : std_logic;
+  signal filter_pix_w : slogic;
+
+  signal data_fifo_out_w : slogic;
+begin
+  p_RED : process(clk_i)
+  begin
+    if rising_edge(clk_i) then
+      write_r <= write_i;
+      read_r <= read_i;
+    end if;
+  end process;
+  write_red_w <= '1' when write_r = '0' and write_i = '1' else '0';
+  read_red_w  <= '1' when  read_r = '0' and  read_i = '1' else '0';
+  input_pix_w(LSB+7 downto LSB)     <= data_i;
+  input_pix_w(LSB-1 downto 0)       <= (others => '0');
+  input_pix_w(MSB+LSB-1 downto LSB+8) <= (others => '0');
+
+  p_VALID_IN : process(clk_i)
+  begin
+    if rising_edge(clk_i) then
+      pix_valid_r <= not empty_fifo_in_w;
+    end if;
+  end process;
+
+  fifo_input_i : fifo
+  generic map (
+    FIFO_SIZE => 48400
+  )
+  port map (
+    write_i => write_red_w,
+    read_i  => not empty_fifo_in_w,
+    data_i  => input_pix_w,
+    clk_i   => clk_i,
+    rstn_i  => rstn_i,
+    full_o  => full_fifo_in_w,
+    empty_o => empty_fifo_in_w,
+    data_o  => data_fifo_in_w
+  );
+
+  comp_sobel_top_i : comp_sobel_top
+  port map (
+    valid_i => pix_valid_r,
+    pix_i   => data_fifo_in_w,
+    clk_i   => clk_i,
+    rstn_i  => rstn_i,
+    valid_o => filter_valid_w,
+    pix_o   => filter_pix_w
+  );
+
+  fifo_output_i : fifo
+  generic map (
+    FIFO_SIZE => 48400
+  )
+  port map (
+    write_i => filter_valid_w,
+    read_i  => read_red_w,
+    data_i  => filter_pix_w,
+    clk_i   => clk_i,
+    rstn_i  => rstn_i,
+    full_o  => full_o,
+    empty_o => empty_o,
+    data_o  => data_fifo_out_w
+  );
+
+  data_o <= data_fifo_out_w(29 downto 22);
+
+end architecture;

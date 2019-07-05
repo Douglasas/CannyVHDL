@@ -38,7 +38,7 @@
 
 set_global_assignment -name FAMILY "Cyclone V"
 set_global_assignment -name DEVICE 5CSEMA5F31C6
-set_global_assignment -name TOP_LEVEL_ENTITY comp_sobel_top
+set_global_assignment -name TOP_LEVEL_ENTITY canny_top
 set_global_assignment -name ORIGINAL_QUARTUS_VERSION 13.1
 set_global_assignment -name PROJECT_CREATION_TIME_DATE "02:32:06  JUNE 20, 2019"
 set_global_assignment -name LAST_QUARTUS_VERSION 13.1
@@ -69,6 +69,14 @@ set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id img_prewitt_
 set_global_assignment -name EDA_TEST_BENCH_RUN_SIM_FOR "1 ns" -section_id img_prewitt_tb
 set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME img_prewitt_tb -section_id img_prewitt_tb
 set_global_assignment -name EDA_TEST_BENCH_FILE ../sim/prewitt/img_prewitt_tb.vhd -section_id img_prewitt_tb
+set_global_assignment -name VHDL_FILE ../hdl/laplacian_filter/laplacian_filter_top.vhd
+set_global_assignment -name VHDL_FILE ../hdl/laplacian_filter/laplacian_filter_pkg.vhd
+set_global_assignment -name VHDL_FILE ../hdl/laplacian/laplacian_pkg.vhd
+set_global_assignment -name VHDL_FILE ../hdl/laplacian/laplacian_top.vhd
+set_global_assignment -name VHDL_FILE ../hdl/roberts_filter/roberts_filter_top.vhd
+set_global_assignment -name VHDL_FILE ../hdl/roberts_filter/roberts_filter_pkg.vhd
+set_global_assignment -name VHDL_FILE ../hdl/roberts/roberts_top.vhd
+set_global_assignment -name VHDL_FILE ../hdl/roberts/roberts_pkg.vhd
 set_global_assignment -name VHDL_FILE ../hdl/complete_sobel/comp_sobel_top.vhd
 set_global_assignment -name VHDL_FILE ../hdl/complete_sobel/comp_sobel_pkg.vhd
 set_global_assignment -name VHDL_FILE ../hdl/prewitt_filter/prewitt_filter_pkg.vhd

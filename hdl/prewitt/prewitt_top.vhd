@@ -27,8 +27,8 @@ architecture arc of prewitt_top is
 	signal window_data_w   : slogic_window(WINDOW_Y-1 downto 0, WINDOW_X-1 downto 0);
 	signal window_comp_x_w : slogic_window(WINDOW_Y-1 downto 0, WINDOW_X-1 downto 0);
 	signal window_comp_y_w : slogic_window(WINDOW_Y-1 downto 0, WINDOW_X-1 downto 0);
-	signal semi_result_x_w : slogic_vec(WINDOW_Y * WINDOW_X downto 0);
-	signal semi_result_y_w : slogic_vec(WINDOW_Y * WINDOW_X downto 0);
+	signal semi_result_x_w : slogic_vec(15 downto 0);
+	signal semi_result_y_w : slogic_vec(15 downto 0);
 
   constant PREWITT_KERNEL_X: slogic_window(WINDOW_X-1 downto 0, WINDOW_Y-1 downto 0) := (
 		(to_slogic(-1), to_slogic(0), to_slogic(1)),
@@ -36,9 +36,9 @@ architecture arc of prewitt_top is
 		(to_slogic(-1), to_slogic(0), to_slogic(1))
 	);
 	constant PREWITT_KERNEL_Y: slogic_window(WINDOW_X-1 downto 0, WINDOW_Y-1 downto 0) := (
-		(to_slogic(1), to_slogic(1), to_slogic(1)),
+		(to_slogic(-1), to_slogic(-1), to_slogic(-1)),
 		(to_slogic(0), to_slogic(0), to_slogic(0)),
-		(to_slogic(-1), to_slogic(-1), to_slogic(-1))
+		(to_slogic(1), to_slogic(1), to_slogic(1))
 	);
 
   signal valid_w : std_logic;
@@ -100,11 +100,11 @@ begin
 	 end generate g_GENERATE_FOR_j;
   end generate g_GENERATE_FOR_i;
 
-  semi_result_x_w(WINDOW_Y*WINDOW_X) <= to_slogic(0);
-  semi_result_y_w(WINDOW_Y*WINDOW_X) <= to_slogic(0);
+  semi_result_x_w(15 downto WINDOW_Y*WINDOW_X) <= (others => to_slogic(0));
+  semi_result_y_w(15 downto WINDOW_Y*WINDOW_X) <= (others => to_slogic(0));
 
-  x_pix_w <= sum_reduce(semi_result_x_w, WINDOW_Y * WINDOW_X + 1);
-  y_pix_w <= sum_reduce(semi_result_y_w, WINDOW_Y * WINDOW_X + 1);
+  x_pix_w <= sum_reduce(semi_result_x_w, 16);
+  y_pix_w <= sum_reduce(semi_result_y_w, 16);
 
   p_OUT : process(clk_i, rstn_i)
   begin

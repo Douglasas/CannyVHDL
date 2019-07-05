@@ -45,7 +45,7 @@ begin
     pix_o   => gauss_pix_w
   );
 
-  prewitt_top_i : sobel_top
+  prewitt_top_i : prewitt_top
   port map (
     valid_i => gauss_valid_w,
     pix_i   => gauss_pix_w,

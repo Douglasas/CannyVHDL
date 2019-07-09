@@ -33,20 +33,20 @@ architecture arch of roberts_filter_top is
   signal gradient_pix_w   : slogic;
 begin
 
-  gaussian_top_i : gaussian_top
-  port map (
-    valid_i => valid_i,
-    pix_i   => pix_i,
-    rstn_i  => rstn_i,
-    clk_i   => clk_i,
-    valid_o => gauss_valid_w,
-    pix_o   => gauss_pix_w
-  );
+  -- gaussian_top_i : gaussian_top
+  -- port map (
+  --   valid_i => valid_i,
+  --   pix_i   => pix_i,
+  --   rstn_i  => rstn_i,
+  --   clk_i   => clk_i,
+  --   valid_o => gauss_valid_w,
+  --   pix_o   => gauss_pix_w
+  -- );
 
   roberts_top_i : roberts_top
   port map (
-    valid_i => gauss_valid_w,
-    pix_i   => gauss_pix_w,
+    valid_i => valid_i,
+    pix_i   => pix_i,
     rstn_i  => rstn_i,
     clk_i   => clk_i,
     valid_o => roberts_valid_w,

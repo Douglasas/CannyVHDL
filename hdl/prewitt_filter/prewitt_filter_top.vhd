@@ -35,20 +35,20 @@ architecture arch of prewitt_filter_top is
 
 begin
 
-  gaussian_top_i : gaussian_top
-  port map (
-    valid_i => valid_i,
-    pix_i   => pix_i,
-    rstn_i  => rstn_i,
-    clk_i   => clk_i,
-    valid_o => gauss_valid_w,
-    pix_o   => gauss_pix_w
-  );
+  -- gaussian_top_i : gaussian_top
+  -- port map (
+  --   valid_i => valid_i,
+  --   pix_i   => pix_i,
+  --   rstn_i  => rstn_i,
+  --   clk_i   => clk_i,
+  --   valid_o => gauss_valid_w,
+  --   pix_o   => gauss_pix_w
+  -- );
 
   prewitt_top_i : prewitt_top
   port map (
-    valid_i => gauss_valid_w,
-    pix_i   => gauss_pix_w,
+    valid_i => valid_i,
+    pix_i   => pix_i,
     rstn_i  => rstn_i,
     clk_i   => clk_i,
     valid_o => prewitt_valid_w,

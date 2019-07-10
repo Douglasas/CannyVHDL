@@ -378,6 +378,8 @@ soc_system u0 (
   // sobel_int
   // laplacian_int
   // roberts_int
+  // prewitt_int
+  // canny_int
 
   roberts_int integration_inst (
     .write_i    (w_PIO_write_i),

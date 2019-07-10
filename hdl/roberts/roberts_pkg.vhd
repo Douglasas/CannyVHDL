@@ -10,8 +10,8 @@ package roberts_pkg is
 	----------size--------------------
 	constant WINDOW_X : integer := 2;
 	constant WINDOW_Y : integer := 2;
-	constant IMAGE_X : integer := INPUT_IMAGE_X-2;
-	constant IMAGE_Y : integer := INPUT_IMAGE_Y-2;
+	constant IMAGE_X : integer := INPUT_IMAGE_X;
+	constant IMAGE_Y : integer := INPUT_IMAGE_Y;
 
   component roberts_top
   port (

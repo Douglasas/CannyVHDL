@@ -15,7 +15,7 @@
 #define IMAGE_X 220
 #define IMAGE_Y 220
 #define INPUT_IMAGE_SIZE (IMAGE_X*IMAGE_Y)
-#define BORDER_QT_LOST 1
+#define BORDER_QT_LOST 2
 #define OUTPUT_IMAGE_SIZE ((IMAGE_X-BORDER_QT_LOST)*(IMAGE_Y-BORDER_QT_LOST))
 
 int main() {
@@ -100,7 +100,7 @@ int main() {
   char nome [10];
 
   int cont = 0;
-  //printf("escrevendo na fila\n");
+  printf("escrevendo na fila\n");
 
   while (!feof(file) && cont < INPUT_IMAGE_SIZE){
   	/// Lê uma linha (inclusive com o '\n')
@@ -115,7 +115,7 @@ int main() {
   }
   fclose(file);
 
-  //printf("foram escritos %d, ultimo inserido %d, e o barramento em %d \n", cont, *(uint32_t *)h2p_lw_PIO_data_i, *(uint32_t *) h2p_lw_full_o );
+  printf("foram escritos %d, ultimo inserido %d, e o barramento em %d \n", cont, *(uint32_t *)h2p_lw_PIO_data_i, *(uint32_t *) h2p_lw_full_o );
 
   fileout = fopen("out.dat", "w");  // Cria um arquivo texto para gravação
   if (fileout == NULL) {
@@ -124,19 +124,19 @@ int main() {
   }
 
 
-  //printf("Espera execução\n");
+  printf("Espera execução\n");
 
   do {
     // espera terminar
     data_PIO_full_o = *(uint32_t *) h2p_lw_full_o;
   } while (data_PIO_full_o == 0x0);
 
-  //printf("retirando da fila \n");
+  printf("retirando da fila \n");
 
   cont = 0;
   char buffer[12] = {0};
   while (cont < OUTPUT_IMAGE_SIZE) {
-    //printf("%d\n", cont);
+    // printf("%d\n", cont);
 
     // do {
     //   // espera ter resultado disponível

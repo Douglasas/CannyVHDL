@@ -381,7 +381,7 @@ soc_system u0 (
   // prewitt_int
   // canny_int
 
-  roberts_int integration_inst (
+  prewitt_int integration_inst (
     .write_i    (w_PIO_write_i),
     .read_i     (w_PIO_read_i),
     .data_i     (w_PIO_data_i),

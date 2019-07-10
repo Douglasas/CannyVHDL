@@ -6,25 +6,24 @@ library work;
 use work.main_pkg.all;
 use work.slogic_pkg.all;
 use work.fifo_pkg.all;
-use work.comp_sobel_pkg.all;
+use work.laplacian_filter_pkg.all;
 
-entity sobel_int is
+entity laplacian_int is
   port (
     write_i : in std_logic;
     read_i  : in std_logic;
     data_i  : in std_logic_vector(7 downto 0);
 
-    rstn_i     : in std_logic;
-    clk_i      : in std_logic;
-    clk_proc_i : in std_logic;
+    rstn_i  : in std_logic;
+    clk_i   : in std_logic;
 
     empty_o : out std_logic;
     full_o  : out std_logic;
-    data_o  : out std_logic_vector(11 downto 0)
+    data_o  : out std_logic_vector(7 downto 0)
   );
 end entity;
 
-architecture arch of sobel_int is
+architecture arch of laplacian_int is
   signal write_r     : std_logic;
   signal write_red_w : std_logic;
   signal read_r      : std_logic;
@@ -40,23 +39,13 @@ architecture arch of sobel_int is
   signal filter_valid_w : std_logic;
   signal filter_pix_w : slogic;
 
-  signal empty_fifo_out_w : std_logic;
-  signal full_fifo_out_w  : std_logic;
-  signal data_fifo_out_w  : slogic;
-
-  signal delayed_read_r      : std_logic;
-  signal delayed_out_empty_r : std_logic;
-  signal delayed_out_full_r  : std_logic;
-  signal delayed_out_data_r  : std_logic_vector(11 downto 0);
+  signal data_fifo_out_w : slogic;
 begin
-  p_RED : process(clk_proc_i, rstn_i)
+  p_RED : process(clk_i)
   begin
-    if rstn_i = '0' then
-      write_r <= '0';
-      read_r  <= '0';
-    elsif rising_edge(clk_proc_i) then
+    if rising_edge(clk_i) then
       write_r <= write_i;
-      read_r  <= read_i;
+      read_r <= read_i;
     end if;
   end process;
   write_red_w <= '1' when write_r = '0' and write_i = '1' else '0';
@@ -65,11 +54,9 @@ begin
   input_pix_w(LSB-1 downto 0)       <= (others => '0');
   input_pix_w(MSB+LSB-1 downto LSB+8) <= (others => '0');
 
-  p_VALID_IN : process(clk_proc_i, rstn_i)
+  p_VALID_IN : process(clk_i)
   begin
-    if rstn_i = '0' then
-      pix_valid_r <= '0';
-    elsif rising_edge(clk_proc_i) then
+    if rising_edge(clk_i) then
       pix_valid_r <= not empty_fifo_in_w;
     end if;
   end process;
@@ -82,18 +69,18 @@ begin
     write_i => write_red_w,
     read_i  => not empty_fifo_in_w,
     data_i  => input_pix_w,
-    clk_i   => clk_proc_i,
+    clk_i   => clk_i,
     rstn_i  => rstn_i,
     full_o  => full_fifo_in_w,
     empty_o => empty_fifo_in_w,
     data_o  => data_fifo_in_w
   );
 
-  comp_sobel_top_i : comp_sobel_top
+  laplacian_filter_top_i : laplacian_filter_top
   port map (
     valid_i => pix_valid_r,
     pix_i   => data_fifo_in_w,
-    clk_i   => clk_proc_i,
+    clk_i   => clk_i,
     rstn_i  => rstn_i,
     valid_o => filter_valid_w,
     pix_o   => filter_pix_w
@@ -107,36 +94,13 @@ begin
     write_i => filter_valid_w,
     read_i  => read_red_w,
     data_i  => filter_pix_w,
-    clk_i   => clk_proc_i,
+    clk_i   => clk_i,
     rstn_i  => rstn_i,
-    full_o  => full_fifo_out_w,
-    empty_o => empty_fifo_out_w,
+    full_o  => full_o,
+    empty_o => empty_o,
     data_o  => data_fifo_out_w
   );
 
-  full_o  <= full_fifo_out_w;
-  empty_o <= empty_fifo_out_w;
-
-  p_DELAYED_READ : process(clk_proc_i, rstn_i)
-  begin
-    if rstn_i = '0' then
-      delayed_read_r <= '0';
-    elsif rising_edge(clk_proc_i) then
-      delayed_read_r <= read_red_w;
-    end if;
-  end process;
-
-  p_DELAYED : process(clk_proc_i, rstn_i)
-  begin
-    if rstn_i = '0' then
-      delayed_out_data_r  <= (others => '0');
-    elsif rising_edge(clk_proc_i) then
-      if delayed_read_r = '1' then
-        delayed_out_data_r <= data_fifo_out_w(33 downto 22);
-      end if;
-    end if;
-  end process;
-
-  data_o  <= delayed_out_data_r;
+  data_o <= data_fifo_out_w(29 downto 22);
 
 end architecture;

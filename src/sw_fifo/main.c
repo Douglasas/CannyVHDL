@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <time.h>
 #include <sys/mman.h>
 #include "hwlib.h"
 #include "soc_cv_av/socal/socal.h"
@@ -21,20 +22,20 @@ int main() {
   void *virtual_base;
   int fd;
 
-  int data_PIO_data_i; 
+  int data_PIO_data_i;
   int data_PIO_write_i;
-  int data_PIO_read_i; 
-  int data_PIO_rstn_i; 
-  int data_PIO_data_o; 
-  int data_PIO_full_o; 
+  int data_PIO_read_i;
+  int data_PIO_rstn_i;
+  int data_PIO_data_o;
+  int data_PIO_full_o;
   int data_PIO_empty_o;
 
-  void *h2p_lw_PIO_data_i; 
+  void *h2p_lw_PIO_data_i;
   void *h2p_lw_write_i;
-  void *h2p_lw_read_i; 
-  void *h2p_lw_rstn_i; 
-  void *h2p_lw_data_o; 
-  void *h2p_lw_full_o; 
+  void *h2p_lw_read_i;
+  void *h2p_lw_rstn_i;
+  void *h2p_lw_data_o;
+  void *h2p_lw_full_o;
   void *h2p_lw_empty_o;
 
   FILE * file,*fileout;
@@ -67,50 +68,54 @@ int main() {
   /////////Using SoC
 
   /// atribui valor as variveis
-  data_PIO_data_i  = 0x00000001; 
+  data_PIO_data_i  = 0x00000001;
   data_PIO_write_i = 0x00000000;
-  data_PIO_read_i  = 0x00000000; 
-  data_PIO_rstn_i  = 0x00000001; 
+  data_PIO_read_i  = 0x00000000;
+  data_PIO_rstn_i  = 0x00000001;
 
   ///mostra os valores
-  printf("dado é = %x\n",    data_PIO_data_i );
-  printf("write é = %x\n",   data_PIO_write_i );
-  printf("read é = %x\n",    data_PIO_read_i );
-  printf("reset n é = %x\n", data_PIO_rstn_i );
+  // printf("dado:  %x\n", data_PIO_data_i );
+  // printf("write: %x\n", data_PIO_write_i );
+  // printf("read:  %x\n", data_PIO_read_i );
+  // printf("reset: %x\n", data_PIO_rstn_i );
 
   /// atribui valores as pontes
-  *(uint32_t *)h2p_lw_PIO_data_i     = data_PIO_data_i;
-  *(uint32_t *)h2p_lw_write_i        = data_PIO_write_i;
-  *(uint32_t *)h2p_lw_read_i         = data_PIO_read_i;
-  *(uint32_t *)h2p_lw_rstn_i         = data_PIO_rstn_i;
-
+  *(uint32_t *)h2p_lw_PIO_data_i = data_PIO_data_i;
+  *(uint32_t *)h2p_lw_write_i    = data_PIO_write_i;
+  *(uint32_t *)h2p_lw_read_i     = data_PIO_read_i;
+  *(uint32_t *)h2p_lw_rstn_i     = data_PIO_rstn_i;
 
   ///reseta
   data_PIO_rstn_i            = 0x00000000;
   *(uint32_t *)h2p_lw_rstn_i = data_PIO_rstn_i;
-  data_PIO_rstn_i            = 0x00000001; 
+  data_PIO_rstn_i            = 0x00000001;
   *(uint32_t *)h2p_lw_rstn_i = data_PIO_rstn_i;
-  
+
+  clock_t start, end;
+  double cpu_time_used;
+
+  start = clock();
+
   file = fopen("img.dat","r");
   char nome [10];
 
   int cont = 0;
-  printf("escrevendo na fila\n");
-  
+  //printf("escrevendo na fila\n");
+
   while (!feof(file) && cont < INPUT_IMAGE_SIZE){
   	/// Lê uma linha (inclusive com o '\n')
     fgets(nome, 10, file);
     data_PIO_data_i = strtol(nome, NULL, 10);
-    
+
     *(uint32_t *)h2p_lw_PIO_data_i     = data_PIO_data_i;
     *(uint32_t *)h2p_lw_write_i        = 0x00000001;
-    *(uint32_t *)h2p_lw_write_i        = 0x00000000;      
+    *(uint32_t *)h2p_lw_write_i        = 0x00000000;
     data_PIO_full_o                    = *(uint32_t *) h2p_lw_full_o;
     cont++;
   }
   fclose(file);
-  
-  printf("foram escritos %d, ultimo inserido %d, e o barramento em %d \n", cont, *(uint32_t *)h2p_lw_PIO_data_i, *(uint32_t *) h2p_lw_full_o );
+
+  //printf("foram escritos %d, ultimo inserido %d, e o barramento em %d \n", cont, *(uint32_t *)h2p_lw_PIO_data_i, *(uint32_t *) h2p_lw_full_o );
 
   fileout = fopen("out.dat", "w");  // Cria um arquivo texto para gravação
   if (fileout == NULL) {
@@ -120,23 +125,23 @@ int main() {
 
 
   //printf("Espera execução\n");
-  
-  //data_PIO_full_o = 0x0;
-  //while (data_PIO_full_o == 0x0  ){
-  //  // espera terminar
-  //  data_PIO_full_o = *(uint32_t *) h2p_lw_full_o;
-  //}
-  
-  printf("retirando da fila \n");
-  
+
+  do {
+    // espera terminar
+    data_PIO_full_o = *(uint32_t *) h2p_lw_full_o;
+  } while (data_PIO_full_o == 0x0);
+
+  //printf("retirando da fila \n");
+
   cont = 0;
   char buffer[12] = {0};
   while (cont < OUTPUT_IMAGE_SIZE) {
     //printf("%d\n", cont);
-    // espera ter resultado disponível
-    do {
-      data_PIO_empty_o = *(uint32_t *) h2p_lw_empty_o;
-    } while(data_PIO_empty_o == 0x1);
+
+    // do {
+    //   // espera ter resultado disponível
+    //   data_PIO_empty_o = *(uint32_t *) h2p_lw_empty_o;
+    // } while(data_PIO_empty_o == 0x1);
     // ativa sinal de leitura
     *(uint32_t *)h2p_lw_read_i = 0x1;
     *(uint32_t *)h2p_lw_read_i = 0x0;
@@ -149,6 +154,10 @@ int main() {
   }
 
   fclose(fileout);
+
+  end = clock();
+  cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
+  printf("CPU time used: %f\n", cpu_time_used);
 
   printf("Fim de execução  \n");
 

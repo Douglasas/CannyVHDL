@@ -2,7 +2,7 @@ set_global_assignment -entity "soc_system" -library "soc_system" -name IP_TOOL_N
 set_global_assignment -entity "soc_system" -library "soc_system" -name IP_TOOL_VERSION "13.1"
 set_global_assignment -entity "soc_system" -library "soc_system" -name IP_TOOL_ENV "Qsys"
 set_global_assignment -library "soc_system" -name SOPCINFO_FILE [file join $::quartus(qip_path) "../../soc_system.sopcinfo"]
-set_global_assignment -entity "soc_system" -library "soc_system" -name SLD_INFO "QSYS_NAME soc_system HAS_SOPCINFO 1 GENERATION_ID 1562446259"
+set_global_assignment -entity "soc_system" -library "soc_system" -name SLD_INFO "QSYS_NAME soc_system HAS_SOPCINFO 1 GENERATION_ID 1562692640"
 set_global_assignment -library "soc_system" -name MISC_FILE [file join $::quartus(qip_path) "../../soc_system.cmp"]
 set_global_assignment -library "soc_system" -name SLD_FILE [file join $::quartus(qip_path) "soc_system.regmap"]
 set_global_assignment -library "soc_system" -name MISC_FILE [file join $::quartus(qip_path) "soc_system_hps_0_hps.svd"]
@@ -218,7 +218,6 @@ set_global_assignment -library "soc_system" -name SYSTEMVERILOG_FILE [file join 
 set_instance_assignment -entity "soc_system_hps_0_hps_io_border" -library "soc_system" -name HPS_ISW_FILE [file join $::quartus(qip_path) "submodules/hps.pre.xml"]
 set_global_assignment -library "soc_system" -name MISC_FILE [file join $::quartus(qip_path) "submodules/hps.pre.xml"]
 set_global_assignment -library "soc_system" -name SYSTEMVERILOG_FILE [file join $::quartus(qip_path) "submodules/soc_system_hps_0_fpga_interfaces.sv"]
-set_global_assignment -library "soc_system" -name SDC_FILE [file join $::quartus(qip_path) "submodules/soc_system_hps_0_fpga_interfaces.sdc"]
 
 set_global_assignment -entity "altera_reset_controller" -library "soc_system" -name IP_TOOL_NAME "altera_reset_controller"
 set_global_assignment -entity "altera_reset_controller" -library "soc_system" -name IP_TOOL_VERSION "13.1"

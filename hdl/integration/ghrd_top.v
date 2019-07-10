@@ -375,7 +375,11 @@ soc_system u0 (
     .outclk_0 (w_CLK_PROC_PLL)
   );
 
-  sobel_int sobel_int_i (
+  // sobel_int
+  // laplacian_int
+  // roberts_int
+
+  roberts_int integration_inst (
     .write_i    (w_PIO_write_i),
     .read_i     (w_PIO_read_i),
     .data_i     (w_PIO_data_i),
@@ -386,16 +390,5 @@ soc_system u0 (
     .full_o     (w_PIO_full_o),
     .data_o     (w_PIO_data_o)
   );
-
-  // laplacian_int laplacian_int_i (
-  //   .write_i (w_PIO_write_i),
-  //   .read_i  (w_PIO_read_i),
-  //   .data_i  (w_PIO_data_i),
-  //   .rstn_i  (w_PIO_rstn_i),
-  //   .clk_i   (w_USER_CLOCK),
-  //   .empty_o (w_PIO_empty_o),
-  //   .full_o  (w_PIO_full_o),
-  //   .data_o  (w_PIO_data_o)
-  // );
 
 endmodule

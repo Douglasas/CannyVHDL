@@ -8,6 +8,10 @@ use work.sobel_pkg.all;
 use work.slidingwindow_pkg.all;
 
 entity sobel_top is
+  generic (
+    INPUT_IMAGE_X : integer;
+    INPUT_IMAGE_Y : integer
+  );
 	port(
 	------------input------------
 		valid_i : in std_logic;
@@ -44,8 +48,8 @@ architecture arc of sobel_top is
 begin
 	slidingwindow_top_i : slidingwindow_top
   generic map (
-		IMAGE_X  => IMAGE_X,
-		IMAGE_Y  => IMAGE_Y,
+		IMAGE_X  => INPUT_IMAGE_X,
+		IMAGE_Y  => INPUT_IMAGE_Y,
 		WINDOW_X => WINDOW_X,
 		WINDOW_Y => WINDOW_Y
   )

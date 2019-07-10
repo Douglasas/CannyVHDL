@@ -39,6 +39,10 @@ begin
   end process;
 
   sobel_top_i : sobel_top
+  generic map (
+    INPUT_IMAGE_X => 5,
+    INPUT_IMAGE_Y => 5
+  )
   port map (
     valid_i => valid,
     pix_i   => pix,

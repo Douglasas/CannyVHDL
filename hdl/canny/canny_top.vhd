@@ -2,6 +2,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 
 library work;
+use work.main_pkg.all;
 use work.slogic_pkg.all;
 use work.gaussian_pkg.all;
 use work.sobel_pkg.all;
@@ -74,6 +75,10 @@ begin
   );
 
   sobel_top_i : sobel_top
+  generic map (
+    INPUT_IMAGE_X => INPUT_IMAGE_X-2,
+    INPUT_IMAGE_Y => INPUT_IMAGE_Y-2
+  )
   port map (
     valid_i => gauss_valid_w,
     pix_i   => gauss_pix_w,

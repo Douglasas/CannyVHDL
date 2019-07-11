@@ -3,7 +3,6 @@ use ieee.std_logic_1164.all;
 
 library work;
 use work.slogic_pkg.all;
-use work.gaussian_pkg.all;
 use work.laplacian_pkg.all;
 
 entity laplacian_filter_top is
@@ -21,35 +20,44 @@ end entity;
 
 architecture arch of laplacian_filter_top is
 
-  signal gauss_valid_w : std_logic;
-  signal gauss_pix_w   : slogic;
+  signal valid_input_r : std_logic;
+  signal pix_input_r   : slogic;
+
+  signal valid_output_r : std_logic;
+  signal pix_output_r   : slogic;
 
   signal laplacian_valid_w : std_logic;
   signal laplacian_pix_w   : slogic;
 
 begin
 
-  -- gaussian_top_i : gaussian_top
-  -- port map (
-  --   valid_i => valid_i,
-  --   pix_i   => pix_i,
-  --   rstn_i  => rstn_i,
-  --   clk_i   => clk_i,
-  --   valid_o => gauss_valid_w,
-  --   pix_o   => gauss_pix_w
-  -- );
+  p_INPUT : process(clk_i)
+  begin
+    if rising_edge(clk_i) then
+      valid_input_r <= valid_i;
+      pix_input_r   <= pix_i;
+    end if;
+  end process;
 
   laplacian_top_i : laplacian_top
   port map (
-    valid_i => valid_i,
-    pix_i   => pix_i,
+    valid_i => valid_input_r,
+    pix_i   => pix_input_r,
     rstn_i  => rstn_i,
     clk_i   => clk_i,
     valid_o => laplacian_valid_w,
     pix_o   => laplacian_pix_w
   );
 
-  valid_o <= laplacian_valid_w;
-  pix_o <= laplacian_pix_w;
+  p_OUTPUT : process(clk_i)
+  begin
+    if rising_edge(clk_i) then
+      valid_output_r <= laplacian_valid_w;
+      pix_output_r   <= laplacian_pix_w;
+    end if;
+  end process;
+
+  valid_o <= valid_output_r;
+  pix_o <= pix_output_r;
 
 end architecture;

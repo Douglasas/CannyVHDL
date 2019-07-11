@@ -97,9 +97,9 @@ architecture arch of non_max_supress_top is
 
 -- Multiplex 2x1 saida
 	pix_o <= window_data_norm_w(1,1) when
-            window_data_norm_w(1,1) >= exit_multiplex_q_w-to_slogic(10)
+            window_data_norm_w(1,1) >= exit_multiplex_q_w
           and
-            window_data_norm_w(1,1) >= exit_multiplex_r_w-to_slogic(10)
+            window_data_norm_w(1,1) >= exit_multiplex_r_w
           else (others => '0');
 
 end arch;

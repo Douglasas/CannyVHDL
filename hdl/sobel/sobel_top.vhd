@@ -34,9 +34,9 @@ architecture arc of sobel_top is
 		(to_slogic(-1), to_slogic(0), to_slogic(1))
 	);
 	constant SOBEL_KERNEL_Y : slogic_window(WINDOW_X-1 downto 0, WINDOW_Y-1 downto 0) := (
-		(to_slogic(-1), to_slogic(-2), to_slogic(-1)),
+		(to_slogic(1), to_slogic(2), to_slogic(1)),
 		(to_slogic(0),  to_slogic(0),  to_slogic(0)),
-		(to_slogic(1),  to_slogic(2),  to_slogic(1))
+		(to_slogic(-1),  to_slogic(-2),  to_slogic(-1))
 	);
 
 	signal window_data_w   : slogic_window (WINDOW_Y-1 downto 0, WINDOW_X-1 downto 0);

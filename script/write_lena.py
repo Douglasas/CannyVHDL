@@ -22,7 +22,7 @@ def img_to_dat(img_name: str, file_name: str = "../dat/img.dat"):
     for line in img:
         for pix in line:
 
-            file.write(to_fixed(pix))
+            file.write(to_fixed(pix/255.0))
             file.write('\n')
         i = 0
         j+= 1

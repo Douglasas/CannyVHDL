@@ -37,6 +37,7 @@ def plot_dat(img_name: str):
     plt.imshow(img_res, cmap='gray')
     plt.show()
     cv2.imwrite("result.png", img_res)
+    
 import glob
 path = "../dat"
 files = [f for f in glob.glob(path + "**/*.dat", recursive=False)]

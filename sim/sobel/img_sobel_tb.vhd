@@ -4,7 +4,7 @@ use ieee.numeric_std.all;
 
 library work;
 use work.slogic_pkg.all;
-use work.comp_sobel_pkg.all;
+--use work.comp_sobel_pkg.all;
 
 use std.textio.all;
 use ieee.std_logic_textio.all;
@@ -47,7 +47,7 @@ begin
     -- end loop;
     -- valid <= '0';
 
-    file_open(fil_in, "../../dat/img.dat", READ_MODE);
+    file_open(fil_in, "../../../dat/img.dat", READ_MODE);
     valid <= '1';
     while not endfile(fil_in) loop
       readline(fil_in, v_LINE);
@@ -63,7 +63,7 @@ begin
   p_RES : process
     variable v_line : line;
   begin
-    file_open(fil_out, "../../dat/comp_sobel_out.dat", WRITE_MODE);
+    file_open(fil_out, "../../../dat/comp_sobel_out.dat", WRITE_MODE);
 
     while true loop
       wait until rising_edge(clk);
@@ -75,7 +75,7 @@ begin
     wait;
   end process;
 
-  comp_sobel_top_i : comp_sobel_top
+  comp_sobel_top_i : entity work.comp_sobel_top
   port map (
     valid_i => valid,
     pix_i   => pix,

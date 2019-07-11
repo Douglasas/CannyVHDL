@@ -2,8 +2,8 @@ library ieee;
 use ieee.std_logic_1164.all;
 
 library work;
+use work.main_pkg.all;
 use work.slogic_pkg.all;
-use work.gaussian_pkg.all;
 use work.sobel_pkg.all;
 use work.gradient_pkg.all;
 
@@ -21,6 +21,8 @@ entity comp_sobel_top is
 end entity;
 
 architecture arch of comp_sobel_top is
+  signal valid_input_r : std_logic;
+  signal pix_input_r   : slogic;
 
   signal gauss_valid_w : std_logic;
   signal gauss_pix_w   : slogic;
@@ -32,24 +34,26 @@ architecture arch of comp_sobel_top is
   signal gradient_valid_w : std_logic;
   signal gradient_pix_w   : slogic;
 
-  signal valid_r : std_logic;
-  signal pix_r : slogic;
+  signal valid_output_r : std_logic;
+  signal pix_output_r   : slogic;
 begin
 
-  gaussian_top_i : gaussian_top
-  port map (
-    valid_i => valid_i,
-    pix_i   => pix_i,
-    rstn_i  => rstn_i,
-    clk_i   => clk_i,
-    valid_o => gauss_valid_w,
-    pix_o   => gauss_pix_w
-  );
+  p_INPUT : process(clk_i)
+  begin
+    if rising_edge(clk_i) then
+      valid_input_r <= valid_i;
+      pix_input_r   <= pix_i;
+    end if;
+  end process;
 
   sobel_top_i : sobel_top
+  generic map (
+    INPUT_IMAGE_X => INPUT_IMAGE_X,
+    INPUT_IMAGE_Y => INPUT_IMAGE_Y
+  )
   port map (
-    valid_i => gauss_valid_w,
-    pix_i   => gauss_pix_w,
+    valid_i => valid_input_r,
+    pix_i   => pix_input_r,
     rstn_i  => rstn_i,
     clk_i   => clk_i,
     valid_o => sobel_valid_w,
@@ -68,7 +72,15 @@ begin
     pix_o   => gradient_pix_w
   );
 
-  valid_o <= gradient_valid_w;
-  pix_o <= gradient_pix_w;
+  p_OUTPUT : process(clk_i)
+  begin
+    if rising_edge(clk_i) then
+      valid_output_r <= gradient_valid_w;
+      pix_output_r   <= gradient_pix_w;
+    end if;
+  end process;
+
+  valid_o <= valid_output_r;
+  pix_o <= pix_output_r;
 
 end architecture;

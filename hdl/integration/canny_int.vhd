@@ -6,9 +6,9 @@ library work;
 use work.main_pkg.all;
 use work.slogic_pkg.all;
 use work.fifo_pkg.all;
-use work.comp_sobel_pkg.all;
+use work.canny_pkg.all;
 
-entity sobel_int is
+entity canny_int is
   port (
     write_i : in std_logic;
     read_i  : in std_logic;
@@ -24,7 +24,7 @@ entity sobel_int is
   );
 end entity;
 
-architecture arch of sobel_int is
+architecture arch of canny_int is
   signal write_r      : std_logic;
   signal write_prev_r : std_logic;
   signal write_red_w  : std_logic;
@@ -96,7 +96,7 @@ begin
     data_o  => data_fifo_in_w
   );
 
-  comp_sobel_top_i : comp_sobel_top
+  canny_top_i : canny_top
   port map (
     valid_i => pix_valid_r,
     pix_i   => data_fifo_in_w,
@@ -108,7 +108,7 @@ begin
 
   fifo_output_i : fifo
   generic map (
-    FIFO_SIZE => (INPUT_IMAGE_X-2)*(INPUT_IMAGE_Y-2)
+    FIFO_SIZE => (INPUT_IMAGE_X-8)*(INPUT_IMAGE_Y-8)
   )
   port map (
     write_i => filter_valid_w,

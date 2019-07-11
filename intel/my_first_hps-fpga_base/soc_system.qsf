@@ -936,6 +936,19 @@ set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to HPS_DDR3_DM[2] -
 set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to HPS_DDR3_DM[2] -tag __hps_sdram_p0
 set_instance_assignment -name IO_STANDARD "SSTL-15 CLASS I" -to HPS_DDR3_DM[3] -tag __hps_sdram_p0
 set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITH CALIBRATION" -to HPS_DDR3_DM[3] -tag __hps_sdram_p0
+set_global_assignment -name TIMEQUEST_MULTICORNER_ANALYSIS ON
+set_global_assignment -name NUM_PARALLEL_PROCESSORS 8
+set_global_assignment -name SMART_RECOMPILE ON
+set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
+set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
+set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
+set_global_assignment -name VHDL_FILE ../../hdl/integration/canny_int.vhd
+set_global_assignment -name VHDL_FILE ../../hdl/integration/prewitt_int.vhd
+set_global_assignment -name VHDL_FILE ../../hdl/integration/roberts_int.vhd
+set_global_assignment -name VERILOG_FILE ../../hdl/integration/ghrd_top.v
+set_global_assignment -name VHDL_FILE ../../hdl/laplacian_filter/laplacian_filter_top.vhd
+set_global_assignment -name VHDL_FILE ../../hdl/laplacian_filter/laplacian_filter_pkg.vhd
+set_global_assignment -name VHDL_FILE ../../hdl/integration/laplacian_int.vhd
 set_global_assignment -name VHDL_FILE ../../hdl/sqrtip/sqrtip.vhd
 set_global_assignment -name VHDL_FILE ../../hdl/sobel/sobel_top.vhd
 set_global_assignment -name VHDL_FILE ../../hdl/sobel/sobel_pkg.vhd
@@ -961,9 +974,38 @@ set_global_assignment -name QIP_FILE soc_system/synthesis/soc_system.qip
 set_global_assignment -name VERILOG_FILE ip/altsource_probe/hps_reset.v
 set_global_assignment -name VERILOG_FILE ip/debounce/debounce.v
 set_global_assignment -name VERILOG_FILE ip/edge_detect/altera_edge_detector.v
-set_global_assignment -name VERILOG_FILE ghrd_top.v
-set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
-set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
-set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
 set_global_assignment -name VHDL_FILE ../../hdl/integration/sobel_int.vhd
+set_global_assignment -name VHDL_FILE ../../hdl/threshold/threshold_top.vhd
+set_global_assignment -name VHDL_FILE ../../hdl/threshold/threshold_pkg.vhd
+set_global_assignment -name VHDL_FILE ../../hdl/theta/theta_top.vhd
+set_global_assignment -name VHDL_FILE ../../hdl/theta/theta_pkg.vhd
+set_global_assignment -name VHDL_FILE ../../hdl/roberts_filter/roberts_filter_top.vhd
+set_global_assignment -name VHDL_FILE ../../hdl/roberts_filter/roberts_filter_pkg.vhd
+set_global_assignment -name VHDL_FILE ../../hdl/roberts/roberts_top.vhd
+set_global_assignment -name VHDL_FILE ../../hdl/roberts/roberts_pkg.vhd
+set_global_assignment -name VHDL_FILE ../../hdl/prewitt_filter/prewitt_filter_top.vhd
+set_global_assignment -name VHDL_FILE ../../hdl/prewitt_filter/prewitt_filter_pkg.vhd
+set_global_assignment -name VHDL_FILE ../../hdl/prewitt/prewitt_top.vhd
+set_global_assignment -name VHDL_FILE ../../hdl/prewitt/prewitt_pkg.vhd
+set_global_assignment -name VHDL_FILE ../../hdl/normalization/regis.vhd
+set_global_assignment -name VHDL_FILE ../../hdl/normalization/normalization_top.vhd
+set_global_assignment -name VHDL_FILE ../../hdl/normalization/normalization_pkg.vhd
+set_global_assignment -name VHDL_FILE ../../hdl/normalization/normalization_dp.vhd
+set_global_assignment -name VHDL_FILE ../../hdl/normalization/normalization_ctrl.vhd
+set_global_assignment -name VHDL_FILE ../../hdl/non_max_supress/non_max_supress_top.vhd
+set_global_assignment -name VHDL_FILE ../../hdl/non_max_supress/non_max_supress_pkg.vhd
+set_global_assignment -name VHDL_FILE ../../hdl/laplacian/laplacian_top.vhd
+set_global_assignment -name VHDL_FILE ../../hdl/laplacian/laplacian_pkg.vhd
+set_global_assignment -name VHDL_FILE ../../hdl/hysteresis/hysteresis_top.vhd
+set_global_assignment -name VHDL_FILE ../../hdl/hysteresis/hysteresis_pkg.vhd
+set_global_assignment -name VHDL_FILE ../../hdl/div/div.vhd
+set_global_assignment -name QIP_FILE ../../hdl/div/div.qip
+set_global_assignment -name SOURCE_FILE ../../hdl/div/div.cmp
+set_global_assignment -name VHDL_FILE ../../hdl/cordic/atan2.vhd
+set_global_assignment -name VHDL_FILE ../../hdl/cordic/atan2_pkg.vhd
+set_global_assignment -name VHDL_FILE ../../hdl/canny/canny_pkg.vhd
+set_global_assignment -name VHDL_FILE ../../hdl/canny/canny_top.vhd
+set_global_assignment -name QIP_FILE m_altera_pll.qip
+set_global_assignment -name SIP_FILE m_altera_pll.sip
+set_global_assignment -name POWER_USE_INPUT_FILES OFF
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

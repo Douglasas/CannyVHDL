@@ -2,6 +2,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 
 library work;
+use work.main_pkg.all;
 use work.slogic_pkg.all;
 use work.gaussian_pkg.all;
 use work.sobel_pkg.all;
@@ -26,6 +27,12 @@ entity canny_top is
 end entity;
 
 architecture arch of canny_top is
+
+  signal valid_input_r : std_logic;
+  signal pix_input_r   : slogic;
+
+  signal valid_output_r : std_logic;
+  signal pix_output_r   : slogic;
 
   signal gauss_valid_w : std_logic;
   signal gauss_pix_w   : slogic;
@@ -63,10 +70,18 @@ architecture arch of canny_top is
   signal hysteresis_pix_w   : slogic;
 begin
 
+  p_INPUT : process(clk_i)
+  begin
+    if rising_edge(clk_i) then
+      valid_input_r <= valid_i;
+      pix_input_r   <= pix_i;
+    end if;
+  end process;
+
   gaussian_top_i : gaussian_top
   port map (
-    valid_i => valid_i,
-    pix_i   => pix_i,
+    valid_i => valid_input_r,
+    pix_i   => pix_input_r,
     rstn_i  => rstn_i,
     clk_i   => clk_i,
     valid_o => gauss_valid_w,
@@ -74,6 +89,10 @@ begin
   );
 
   sobel_top_i : sobel_top
+  generic map (
+    INPUT_IMAGE_X => INPUT_IMAGE_X-2,
+    INPUT_IMAGE_Y => INPUT_IMAGE_Y-2
+  )
   port map (
     valid_i => gauss_valid_w,
     pix_i   => gauss_pix_w,
@@ -179,7 +198,15 @@ begin
     pix_o   => hysteresis_pix_w
   );
 
-  valid_o <= hysteresis_valid_w;
-  pix_o <= hysteresis_pix_w;
+  p_OUTPUT : process(clk_i)
+  begin
+    if rising_edge(clk_i) then
+      valid_output_r <= hysteresis_valid_w;
+      pix_output_r   <= hysteresis_pix_w;
+    end if;
+  end process;
+
+  valid_o <= valid_output_r;
+  pix_o <= pix_output_r;
 
 end architecture;

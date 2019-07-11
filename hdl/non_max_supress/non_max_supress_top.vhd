@@ -30,7 +30,7 @@ architecture arch of non_max_supress_top is
   signal exit_multiplex_r_w : slogic;
   signal exit_multiplex_q_w : slogic;
 
-	signal window_data_norm_w  : slogic_window(WINDOW_X-1 downto 0, WINDOW_Y-1 downto 0);
+  signal window_data_norm_w  : slogic_window(WINDOW_X-1 downto 0, WINDOW_Y-1 downto 0);
   signal window_data_theta_w : slogic_window(WINDOW_X-1 downto 0, WINDOW_Y-1 downto 0);
 
 	signal exit_decoder_w : std_logic_vector(1 downto 0);
@@ -69,6 +69,8 @@ architecture arch of non_max_supress_top is
 		window_o  => window_data_theta_w
 	);
 
+
+
   valid_o <= valid_norm_w and valid_theta_w;
   -- Multiplex Negative number
   pix_center_theta_w <= window_data_theta_w(1,1) when window_data_theta_w(1,1)(MSB+LSB-1) = '0' else
@@ -95,9 +97,9 @@ architecture arch of non_max_supress_top is
 
 -- Multiplex 2x1 saida
 	pix_o <= window_data_norm_w(1,1) when
-            window_data_norm_w(1,1) >= exit_multiplex_q_w
+            window_data_norm_w(1,1) >= exit_multiplex_q_w-to_slogic(10)
           and
-            window_data_norm_w(1,1) >= exit_multiplex_r_w
+            window_data_norm_w(1,1) >= exit_multiplex_r_w-to_slogic(10)
           else (others => '0');
 
 end arch;

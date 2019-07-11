@@ -6,9 +6,9 @@ library work;
 use work.main_pkg.all;
 use work.slogic_pkg.all;
 use work.fifo_pkg.all;
-use work.comp_sobel_pkg.all;
+use work.laplacian_filter_pkg.all;
 
-entity sobel_int is
+entity laplacian_int is
   port (
     write_i : in std_logic;
     read_i  : in std_logic;
@@ -24,7 +24,7 @@ entity sobel_int is
   );
 end entity;
 
-architecture arch of sobel_int is
+architecture arch of laplacian_int is
   signal write_r      : std_logic;
   signal write_prev_r : std_logic;
   signal write_red_w  : std_logic;
@@ -96,7 +96,7 @@ begin
     data_o  => data_fifo_in_w
   );
 
-  comp_sobel_top_i : comp_sobel_top
+  laplacian_filter_top_i : laplacian_filter_top
   port map (
     valid_i => pix_valid_r,
     pix_i   => data_fifo_in_w,

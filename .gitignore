@@ -8,10 +8,12 @@
 !/sim/**/*.vhd
 !/sim/**/*.wcfg
 !/dat/**/*.dat
+!/dat/**/*.vcd
 !/script/**/*.sh
 !/script/**/*.py
 !/script/**/*.do
 !/script/**/*.tcl
+
 
 !/src/**/*.c
 !/src/**/*.h

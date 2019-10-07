@@ -5,8 +5,8 @@ import numpy as np
 from bitstring import Bits
 import math
 
-MSB = 12
-LSB = 22
+MSB = 10
+LSB = 8
 
 def to_float(val: str) -> float:
     b = Bits('0b'+val, length=MSB+LSB)
@@ -34,10 +34,12 @@ def plot_dat(img_name: str):
         else:
             img_i += 1
 
+    img_res = 255 * img_res / np.max(img_res)
+    cv2.imwrite("../img/"+img_name+".png", img_res)
+
     plt.imshow(img_res, cmap='gray')
     plt.show()
-    cv2.imwrite("result.png", img_res)
-    
+
 import glob
 path = "../dat"
 files = [f for f in glob.glob(path + "**/*.dat", recursive=False)]

@@ -74,7 +74,7 @@ begin
     wait;
   end process;
 
-  canny_top_i : entity work.comp_sobel_top
+  canny_top_i : entity work.canny_top
   port map (
     valid_i => valid,
     pix_i   => pix,

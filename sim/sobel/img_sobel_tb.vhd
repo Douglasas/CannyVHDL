@@ -13,7 +13,7 @@ entity img_sobel_tb is
 end entity;
 
 architecture arch of img_sobel_tb is
-  constant period : time := 10 ps;
+  constant period : time := 10 ns;
   signal rstn : std_logic := '0';
   signal clk : std_logic := '1';
   file fil_in : text;
@@ -47,7 +47,7 @@ begin
     -- end loop;
     -- valid <= '0';
 
-    file_open(fil_in, "../../../dat/img.dat", READ_MODE);
+    file_open(fil_in, "../../dat/img.dat", READ_MODE);
     valid <= '1';
     while not endfile(fil_in) loop
       readline(fil_in, v_LINE);
@@ -63,7 +63,7 @@ begin
   p_RES : process
     variable v_line : line;
   begin
-    file_open(fil_out, "../../../dat/comp_sobel_out.dat", WRITE_MODE);
+    file_open(fil_out, "../../dat/comp_sobel_out.dat", WRITE_MODE);
 
     while true loop
       wait until rising_edge(clk);

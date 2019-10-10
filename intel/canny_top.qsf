@@ -38,7 +38,7 @@
 
 set_global_assignment -name FAMILY "Cyclone V"
 set_global_assignment -name DEVICE 5CSEMA5F31C6
-set_global_assignment -name TOP_LEVEL_ENTITY prewitt_filter_top
+set_global_assignment -name TOP_LEVEL_ENTITY roberts_filter_top
 set_global_assignment -name ORIGINAL_QUARTUS_VERSION 13.1
 set_global_assignment -name PROJECT_CREATION_TIME_DATE "02:32:06  JUNE 20, 2019"
 set_global_assignment -name LAST_QUARTUS_VERSION "18.1.0 Lite Edition"
@@ -100,11 +100,54 @@ set_global_assignment -name EDA_TEST_BENCH_FILE ../sim/canny/img_canny_tb.vhd -s
 set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
 set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
 set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
-set_global_assignment -name POWER_INPUT_FILE_NAME "sim-img_prewitt_tb/dump.vcd" -section_id dump.vcd
+set_global_assignment -name POWER_INPUT_FILE_NAME "sim-img_roberts_tb/dump.vcd" -section_id dump.vcd
 set_global_assignment -name POWER_INPUT_FILE_TYPE VCD -section_id dump.vcd
 set_global_assignment -name POWER_VCD_FILE_START_TIME "0 ns" -section_id dump.vcd
-set_global_assignment -name POWER_VCD_FILE_END_TIME "10 ms" -section_id dump.vcd
-set_instance_assignment -name POWER_READ_INPUT_FILE dump.vcd -to prewitt_filter_top
+set_global_assignment -name POWER_VCD_FILE_END_TIME "100 ms" -section_id dump.vcd
+set_instance_assignment -name POWER_READ_INPUT_FILE dump.vcd -to roberts_filter_top
+set_global_assignment -name POWER_USE_PVA ON
+set_global_assignment -name POWER_DEFAULT_TOGGLE_RATE 80%
+set_location_assignment PIN_AF14 -to clk_i
+set_location_assignment PIN_AC18 -to pix_o[0]
+set_location_assignment PIN_Y17 -to pix_o[1]
+set_location_assignment PIN_AD17 -to pix_o[2]
+set_location_assignment PIN_Y18 -to pix_o[3]
+set_location_assignment PIN_AK16 -to pix_o[4]
+set_location_assignment PIN_AK18 -to pix_o[5]
+set_location_assignment PIN_AK19 -to pix_o[6]
+set_location_assignment PIN_AJ19 -to pix_o[7]
+set_location_assignment PIN_AJ17 -to pix_o[8]
+set_location_assignment PIN_AJ16 -to pix_o[9]
+set_location_assignment PIN_AH18 -to pix_o[10]
+set_location_assignment PIN_AH17 -to pix_o[11]
+set_location_assignment PIN_AG16 -to pix_o[12]
+set_location_assignment PIN_AE16 -to pix_o[13]
+set_location_assignment PIN_AF16 -to pix_o[14]
+set_location_assignment PIN_AG17 -to pix_o[15]
+set_location_assignment PIN_AA18 -to pix_o[16]
+set_location_assignment PIN_AA19 -to pix_o[17]
+set_location_assignment PIN_AB17 -to pix_i[0]
+set_location_assignment PIN_AA21 -to pix_i[1]
+set_location_assignment PIN_AB21 -to pix_i[2]
+set_location_assignment PIN_AC23 -to pix_i[3]
+set_location_assignment PIN_AD24 -to pix_i[4]
+set_location_assignment PIN_AE23 -to pix_i[5]
+set_location_assignment PIN_AE24 -to pix_i[6]
+set_location_assignment PIN_AF25 -to pix_i[7]
+set_location_assignment PIN_AF26 -to pix_i[8]
+set_location_assignment PIN_AG25 -to pix_i[9]
+set_location_assignment PIN_AG26 -to pix_i[10]
+set_location_assignment PIN_AH24 -to pix_i[11]
+set_location_assignment PIN_AH27 -to pix_i[12]
+set_location_assignment PIN_AJ27 -to pix_i[13]
+set_location_assignment PIN_AK29 -to pix_i[14]
+set_location_assignment PIN_AK28 -to pix_i[15]
+set_location_assignment PIN_AK27 -to pix_i[16]
+set_location_assignment PIN_AJ26 -to pix_i[17]
+set_location_assignment PIN_AK26 -to valid_i
+set_location_assignment PIN_AE17 -to valid_o
+set_location_assignment PIN_AH23 -to rstn_i
+set_global_assignment -name SDC_FILE canny_top.out.sdc
 set_global_assignment -name VHDL_FILE ../hdl/gradient/sqrtip.vhd
 set_global_assignment -name VHDL_FILE ../hdl/tests/roberts_test.vhd
 set_global_assignment -name VHDL_FILE ../hdl/tests/laplacian_test.vhd

@@ -27,3 +27,7 @@
 !/xilinx/**/*.bd
 !/xilinx/**/*.edif
 
+
+dat/dataset/
+
+dat/dataset-results*

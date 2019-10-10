@@ -28,6 +28,6 @@
 !/xilinx/**/*.edif
 
 
-dat/dataset/
+!dat/dataset/
 
 dat/dataset-results*

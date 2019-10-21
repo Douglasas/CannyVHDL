@@ -38,7 +38,7 @@
 
 set_global_assignment -name FAMILY "Cyclone V"
 set_global_assignment -name DEVICE 5CSEMA5F31C6
-set_global_assignment -name TOP_LEVEL_ENTITY roberts_filter_top
+set_global_assignment -name TOP_LEVEL_ENTITY canny_top
 set_global_assignment -name ORIGINAL_QUARTUS_VERSION 13.1
 set_global_assignment -name PROJECT_CREATION_TIME_DATE "02:32:06  JUNE 20, 2019"
 set_global_assignment -name LAST_QUARTUS_VERSION "18.1.0 Lite Edition"
@@ -63,14 +63,14 @@ set_global_assignment -name PHYSICAL_SYNTHESIS_EFFORT FAST
 set_global_assignment -name VHDL_INPUT_VERSION VHDL_1993
 set_global_assignment -name VHDL_SHOW_LMF_MAPPING_MESSAGES OFF
 set_global_assignment -name EDA_TEST_BENCH_ENABLE_STATUS TEST_BENCH_MODE -section_id eda_simulation
-set_global_assignment -name EDA_NATIVELINK_SIMULATION_TEST_BENCH img_canny_tb -section_id eda_simulation
+set_global_assignment -name EDA_NATIVELINK_SIMULATION_TEST_BENCH img_laplacian_dataset -section_id eda_simulation
 set_global_assignment -name EDA_TEST_BENCH_NAME img_prewitt_tb -section_id eda_simulation
 set_global_assignment -name EDA_DESIGN_INSTANCE_NAME img_prewitt_tb -section_id img_prewitt_tb
 set_global_assignment -name EDA_TEST_BENCH_RUN_SIM_FOR "500 ns" -section_id img_prewitt_tb
 set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME img_prewitt_tb -section_id img_prewitt_tb
 set_global_assignment -name EDA_MAP_ILLEGAL_CHARACTERS ON -section_id eda_simulation
 set_global_assignment -name EDA_ENABLE_GLITCH_FILTERING ON -section_id eda_simulation
-set_global_assignment -name EDA_WRITE_NODES_FOR_POWER_ESTIMATION OFF -section_id eda_simulation
+set_global_assignment -name EDA_WRITE_NODES_FOR_POWER_ESTIMATION ALL_NODES -section_id eda_simulation
 set_global_assignment -name EDA_TEST_BENCH_NAME img_sobel_tb -section_id eda_simulation
 set_global_assignment -name EDA_DESIGN_INSTANCE_NAME img_sobel_tb -section_id img_sobel_tb
 set_global_assignment -name EDA_TEST_BENCH_RUN_SIM_FOR "500 ns" -section_id img_sobel_tb
@@ -92,19 +92,6 @@ set_global_assignment -name EDA_DESIGN_INSTANCE_NAME img_canny_tb -section_id im
 set_global_assignment -name EDA_TEST_BENCH_RUN_SIM_FOR "1 us" -section_id img_canny_tb
 set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME img_canny_tb -section_id img_canny_tb
 set_global_assignment -name NUM_PARALLEL_PROCESSORS 8
-set_global_assignment -name EDA_TEST_BENCH_FILE ../sim/prewitt/img_prewitt_tb.vhd -section_id img_prewitt_tb
-set_global_assignment -name EDA_TEST_BENCH_FILE ../sim/sobel/img_sobel_tb.vhd -section_id img_sobel_tb
-set_global_assignment -name EDA_TEST_BENCH_FILE ../sim/laplacian/img_laplacian_tb.vhd -section_id img_laplacian_tb
-set_global_assignment -name EDA_TEST_BENCH_FILE ../sim/roberts_filter/img_roberts_tb.vhd -section_id img_roberts_tb
-set_global_assignment -name EDA_TEST_BENCH_FILE ../sim/canny/img_canny_tb.vhd -section_id img_canny_tb
-set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
-set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
-set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
-set_global_assignment -name POWER_INPUT_FILE_NAME "sim-img_roberts_tb/dump.vcd" -section_id dump.vcd
-set_global_assignment -name POWER_INPUT_FILE_TYPE VCD -section_id dump.vcd
-set_global_assignment -name POWER_VCD_FILE_START_TIME "0 ns" -section_id dump.vcd
-set_global_assignment -name POWER_VCD_FILE_END_TIME "100 ms" -section_id dump.vcd
-set_instance_assignment -name POWER_READ_INPUT_FILE dump.vcd -to roberts_filter_top
 set_global_assignment -name POWER_USE_PVA ON
 set_global_assignment -name POWER_DEFAULT_TOGGLE_RATE 80%
 set_location_assignment PIN_AF14 -to clk_i
@@ -147,13 +134,28 @@ set_location_assignment PIN_AJ26 -to pix_i[17]
 set_location_assignment PIN_AK26 -to valid_i
 set_location_assignment PIN_AE17 -to valid_o
 set_location_assignment PIN_AH23 -to rstn_i
+set_global_assignment -name EDA_TEST_BENCH_NAME img_laplacian_dataset -section_id eda_simulation
+set_global_assignment -name EDA_DESIGN_INSTANCE_NAME laplacian_filter_top -section_id img_laplacian_dataset
+set_global_assignment -name EDA_TEST_BENCH_RUN_SIM_FOR "10 ms" -section_id img_laplacian_dataset
+set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME img_laplacian_tb -section_id img_laplacian_dataset
+set_global_assignment -name EDA_TEST_BENCH_DESIGN_INSTANCE_NAME laplacian_filter_top -section_id eda_simulation
+set_global_assignment -name EDA_TEST_BENCH_FILE ../sim/prewitt/img_prewitt_tb.vhd -section_id img_prewitt_tb
+set_global_assignment -name EDA_TEST_BENCH_FILE ../sim/sobel/img_sobel_tb.vhd -section_id img_sobel_tb
+set_global_assignment -name EDA_TEST_BENCH_FILE ../sim/laplacian/img_laplacian_tb.vhd -section_id img_laplacian_tb
+set_global_assignment -name EDA_TEST_BENCH_FILE ../sim/roberts_filter/img_roberts_tb.vhd -section_id img_roberts_tb
+set_global_assignment -name EDA_TEST_BENCH_FILE ../sim/canny/img_canny_tb.vhd -section_id img_canny_tb
+set_global_assignment -name EDA_TEST_BENCH_FILE ../sim/dataset/img_laplacian_tb.vhd -section_id img_laplacian_dataset
+set_global_assignment -name POWER_INPUT_FILE_NAME "sim-img_sobel_tb/dump.vcd" -section_id dump.vcd
+set_global_assignment -name POWER_INPUT_FILE_TYPE VCD -section_id dump.vcd
+set_global_assignment -name POWER_VCD_FILE_START_TIME "0 ns" -section_id dump.vcd
+set_global_assignment -name POWER_VCD_FILE_END_TIME "100 ms" -section_id dump.vcd
+set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
+set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
+set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
+set_instance_assignment -name POWER_READ_INPUT_FILE dump.vcd -to comp_sobel_top
+set_global_assignment -name VHDL_FILE ../hdl/normalization/div.vhd
 set_global_assignment -name SDC_FILE canny_top.out.sdc
 set_global_assignment -name VHDL_FILE ../hdl/gradient/sqrtip.vhd
-set_global_assignment -name VHDL_FILE ../hdl/tests/roberts_test.vhd
-set_global_assignment -name VHDL_FILE ../hdl/tests/laplacian_test.vhd
-set_global_assignment -name VHDL_FILE ../hdl/tests/canny_test.vhd
-set_global_assignment -name VHDL_FILE ../hdl/tests/prewitt_test.vhd
-set_global_assignment -name VHDL_FILE ../hdl/tests/sobel_test.vhd
 set_global_assignment -name VHDL_FILE ../hdl/tests/tests_pkg.vhd
 set_global_assignment -name VHDL_FILE ../sim/sobel/img_sobel_tb.vhd
 set_global_assignment -name VHDL_FILE ../hdl/laplacian_filter/laplacian_filter_top.vhd
@@ -170,7 +172,6 @@ set_global_assignment -name VHDL_FILE ../hdl/prewitt_filter/prewitt_filter_pkg.v
 set_global_assignment -name VHDL_FILE ../hdl/prewitt_filter/prewitt_filter_top.vhd
 set_global_assignment -name VHDL_FILE ../hdl/prewitt/prewitt_top.vhd -hdl_version VHDL_2008
 set_global_assignment -name VHDL_FILE ../hdl/prewitt/prewitt_pkg.vhd
-set_global_assignment -name VHDL_FILE ../hdl/div/div.vhd
 set_global_assignment -name VHDL_FILE ../hdl/main_pkg.vhd
 set_global_assignment -name VHDL_FILE ../hdl/threshold/threshold_top.vhd
 set_global_assignment -name VHDL_FILE ../hdl/threshold/threshold_pkg.vhd

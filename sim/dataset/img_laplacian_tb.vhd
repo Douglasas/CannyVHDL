@@ -4,7 +4,7 @@ use ieee.numeric_std.all;
 
 library work;
 use work.slogic_pkg.all;
-use work.laplacian_filter_pkg.all;
+--use work.laplacian_filter_pkg.all;
 
 use std.textio.all;
 use ieee.std_logic_textio.all;
@@ -57,8 +57,8 @@ begin
         valid <= '0';
         file_close(fil_in);
 
-        wait until pix_count = TOT_OUT_PIX;
-        wait until pix_count = 0;
+        -- wait until pix_count = TOT_OUT_PIX;
+        -- wait until pix_count = 0;
     end loop;
 
     wait;
@@ -70,7 +70,7 @@ begin
     for i in 0 to IMG_QT-1 loop
       file_open(fil_out, "../../dat/dataset-results/img_laplacian_tb/"&integer'image(i)&".dat", WRITE_MODE);
       report "OUT > " & "../../dat/dataset-results/img_laplacian_tb/"&integer'image(i)&".dat";
-      
+
       pix_count <= 0;
       wait for period;
 
@@ -87,7 +87,7 @@ begin
     wait;
   end process;
 
-  laplacian_filter_top_i : laplacian_filter_top
+  laplacian_filter_top_i : entity work.laplacian_filter_top
   port map (
     valid_i => valid,
     pix_i   => pix,

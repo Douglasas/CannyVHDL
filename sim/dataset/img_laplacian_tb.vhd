@@ -57,8 +57,8 @@ begin
         valid <= '0';
         file_close(fil_in);
 
-        -- wait until pix_count = TOT_OUT_PIX;
-        -- wait until pix_count = 0;
+        wait until pix_count = TOT_OUT_PIX;
+        wait until pix_count = 0;
     end loop;
 
     wait;

@@ -16,10 +16,12 @@ fi
 let intbits $1
 let decbits $2
 
-#rm -rf ../../dat/dataset/*
-
-# Write images to dat files
-#python3 write_images.py $1 $2
+read -p "Rewrite input images (y/N)?: " rwrite
+if [ $rwrite = "y" ]; then
+  # Write images to dat files
+  rm -rf ../../dat/dataset/*
+  python3 write_images.py $1 $2
+fi
 
 source setup_env.sh
 

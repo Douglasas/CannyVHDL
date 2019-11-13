@@ -1,6 +1,6 @@
 import math
 
-ANGLE_TABLE_SIZE = 20
+ANGLE_TABLE_SIZE = 10
 ANGLE_TABLE = []
 last_val = 1
 for i in range(ANGLE_TABLE_SIZE):
@@ -44,7 +44,7 @@ def atan2(y: int, x: int) -> int:
     return angle
 
 
-y = -100
+y = -200
 x = 200
 print(atan2(y, x))
 print(math.atan2(y, x)*180/math.pi)

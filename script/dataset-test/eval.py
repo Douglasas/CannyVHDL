@@ -30,7 +30,7 @@ for i in tqdm(range(QT_IMGS)):
     # lp = conv(img, laplacian_k)
     lp = ndimage.convolve(input=img, weights=laplacian_k)[1:-1,1:-1]
     img_lp = 255 * abs(lp)/np.max(abs(lp))
-    cv2.imwrite("../../dat/dataset-final-results/laplacian-4-8/%d-sw.png" % i, img_lp)
+    cv2.imwrite("../../dat/sw-results/laplacian/%d.png" % i, img_lp)
 
     #### ROBERTS ####
     roberts_k_x = np.array([[1, 0], [0, -1]], dtype=np.float64)
@@ -40,6 +40,7 @@ for i in tqdm(range(QT_IMGS)):
     robs_y = conv(img, roberts_k_y)
     img_robs = calc_gradient_abs(robs_x, robs_y)
     img_robs = 255 * img_robs/np.max(img_robs)
+    cv2.imwrite("../../dat/sw-results/roberts/%d.png" % i, img_robs)
 
     #### PREWITT ####
     prewitt_k_x = np.array([[-1, 0, 1], [-1, 0, 1], [-1, 0, 1]], dtype=np.float64)
@@ -49,6 +50,7 @@ for i in tqdm(range(QT_IMGS)):
     img_prew_y = conv(img, prewitt_k_y)
     img_prew = calc_gradient_abs(img_prew_x, img_prew_y)
     img_prew = 255 * img_prew/np.max(img_prew)
+    cv2.imwrite("../../dat/sw-results/prewitt/%d.png" % i, img_prew)
 
     #### SOBEL ####
     sobel_k_x = np.array([[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]], dtype=np.float64)
@@ -58,6 +60,7 @@ for i in tqdm(range(QT_IMGS)):
     img_sob_y = conv(img, sobel_k_y)
     img_sob = calc_gradient_abs(img_sob_x, img_sob_y)
     img_sob = 255 * img_sob/np.max(img_sob)
+    cv2.imwrite("../../dat/sw-results/sobel/%d.png" % i, img_sob)
 
     #### CANNY #####
     if i < QT_IMGS_CANNY:
@@ -75,6 +78,7 @@ for i in tqdm(range(QT_IMGS)):
         img_threshold = threshold(img_supressed)
         img_hist = hysteresis(img_threshold)
         img_canny = 255 * img_hist/np.max(img_hist)
+        cv2.imwrite("../../dat/sw-results/canny/%d.png" % i, img_canny)
 
     # COMPARE IMAGES
 
@@ -125,6 +129,7 @@ for i in tqdm(range(QT_IMGS)):
         )
         hw_canny  = cv2.imread("../../dat/dataset-final-results/canny-10-8/%d.png" % i, cv2.IMREAD_GRAYSCALE).astype(np.float64)
         sum_canny += measure.compare_ssim(img_canny[2:-2,2:-2], hw_canny)
+        print(measure.compare_ssim(img_canny[2:-2,2:-2], hw_canny))
 
 print("AVG SSIM laplacian", sum_lp    / QT_IMGS)
 print("AVG SSIM roberts",   sum_robs  / QT_IMGS)

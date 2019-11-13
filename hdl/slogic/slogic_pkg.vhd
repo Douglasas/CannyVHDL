@@ -6,8 +6,8 @@ use ieee.math_real.all;
 package slogic_pkg is
 
   ---------------- Size Constants -------------
-  constant MSB : integer := 4;
-  constant LSB : integer := 8;
+  constant MSB : integer := 10;
+  constant LSB : integer := 14;
 
   --------------------- Type declaration --------------------
   subtype slogic is std_logic_vector(MSB+LSB-1 downto 0);

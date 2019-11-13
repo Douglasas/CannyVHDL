@@ -30,8 +30,8 @@ set StdArithNoWarnings 1
 set StdNumNoWarnings 1
 restart -force
 
-vcd file dump.vcd
-vcd add -r /$instName/*
+#vcd file dump.vcd
+#vcd add -r /$instName/*
 
 run 100 ms
 #run 210 ms

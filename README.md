@@ -1,4 +1,6 @@
 # CannyVHDL
+#### This work has been published and is open access:
+Douglas A. Santos, Daniel Zolett, Mateus Belli, Felipe Viel, and Cesar A. Zeferino. "An Analysis of the Implementation of Edge Detection Operators in FPGA." In Anais Estendidos do X Simpósio Brasileiro de Engenharia de Sistemas Computacionais, pp. 163-167. SBC, 2020. [https://doi.org/10.5753/sbesc_estendido.2020.13107](https://doi.org/10.5753/sbesc_estendido.2020.13107)
 
 ![Canny Overview](img/canny-overview.png)
 
